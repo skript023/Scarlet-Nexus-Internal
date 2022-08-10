@@ -18,7 +18,7 @@ namespace big
 	{
 		const std::uint32_t thread_count = std::thread::hardware_concurrency();
 
-		LOG(G3LOG_DEBUG) << "Allocating " << thread_count << " threads in thread pool.";
+		LOG(HACKER) << "Allocating " << thread_count << " threads in thread pool.";
 		this->m_thread_pool.reserve(thread_count);
 
 		for (std::uint32_t i = 0; i < thread_count; i++)
@@ -81,6 +81,6 @@ namespace big
 			}
 		}
 
-		LOG(G3LOG_DEBUG) << "Thread " << std::this_thread::get_id() << " exiting...";
+		LOG(HACKER) << "Thread " << std::this_thread::get_id() << " exiting...";
 	}
 }
