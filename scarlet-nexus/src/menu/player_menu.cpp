@@ -37,7 +37,7 @@ namespace big
 
             ImGui::EndGroup();
 
-            ImGui::SameLine(230.f);
+            ImGui::SameLine(240.f);
 
             ImGui::BeginGroup();
 

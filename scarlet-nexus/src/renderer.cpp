@@ -23,6 +23,7 @@ namespace big
 		ImGui_ImplWin32_Shutdown();
 		ImGui_ImplDX11_Shutdown();
 		ImGui::DestroyContext();
+
 		m_d3d_device->Release();
 		m_d3d_context->Release();
 		m_d3d_render_target->Release();
@@ -88,7 +89,8 @@ namespace big
 		this->imgui_init();
 
 		this->m_init = true;
-		LOG(INFO) << "Swapchain initialized.";
+		LOG(HACKER) << "Swapchain initialized.";
+
 		return true;
 	}
 

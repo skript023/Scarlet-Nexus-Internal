@@ -12,7 +12,7 @@ namespace big
 	public:
 		HWND m_hwnd{};
 
-		void* m_swapchain_methods[18];
+		void* m_swapchain_methods[19];
 
 		EngineBase** m_engine{};
 		PVOID m_battle_points_handle;

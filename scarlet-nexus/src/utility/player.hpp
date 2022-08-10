@@ -257,6 +257,8 @@ namespace big::player
 		{
 			return base->m_credit;
 		}
+
+		return 0;
 	}
 
 	inline void set_player_credits(int credits)
@@ -282,6 +284,8 @@ namespace big::player
 		{
 			return base->m_skill_point;
 		}
+
+		return 0;
 	}
 
 	inline void set_player_battle_point(int battlePoints)

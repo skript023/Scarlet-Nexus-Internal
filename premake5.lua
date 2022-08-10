@@ -1,18 +1,16 @@
-workspace "ScarletNexus"
+workspace "scarlet-nexus"
   architecture "x64"
-  startproject "ScarletNexus"
+  startproject "scarlet-nexus"
 
   configurations
   {
-    "Debug",
-    "Release",
-    "Dist"
+    "Release"
   }
 
   outputdir = "%{cfg.buildcfg}"
 
   IncludeDir = {}
-  IncludeDir["fmtlib"] = "vendor/fmtlib/include"
+  IncludeDir["fmt"] = "vendor/fmt/include"
   IncludeDir["json"] = "vendor/json/single_include"
   IncludeDir["MinHook"] = "vendor/MinHook/include"
   IncludeDir["ImGui"] = "vendor/ImGui"
@@ -89,7 +87,7 @@ workspace "ScarletNexus"
     DeclareMSVCOptions()
     DeclareDebugOptions()
 
-  project "fmtlib"
+  project "fmt"
     location "vendor/%{prj.name}"
     kind "StaticLib"
     language "C++"
@@ -164,8 +162,8 @@ workspace "ScarletNexus"
     DeclareMSVCOptions()
     DeclareDebugOptions()
 
-  project "ScarletNexus"
-    location "ScarletNexus"
+  project "scarlet-nexus"
+    location "scarlet-nexus"
     kind "SharedLib"
     language "C++"
 
@@ -185,7 +183,7 @@ workspace "ScarletNexus"
 
     includedirs
     {
-      "%{IncludeDir.fmtlib}",
+      "%{IncludeDir.fmt}",
       "%{IncludeDir.json}",
       "%{IncludeDir.MinHook}",
       "%{IncludeDir.ImGui}",
@@ -201,7 +199,7 @@ workspace "ScarletNexus"
 
     links
     {
-      "fmtlib",
+      "fmt",
       "MinHook",
       "ImGui",
       "g3log"
@@ -220,16 +218,45 @@ workspace "ScarletNexus"
 
     flags { "NoImportLib", "Maps" }
 
-    filter "configurations:Debug"
-	  flags { "LinkTimeOptimization", "MultiProcessorCompile" }
-	  editandcontinue "Off"
-      defines { "ScarletNexus_DEBUG" }
-
     filter "configurations:Release"
 	  flags { "LinkTimeOptimization", "NoManifest", "MultiProcessorCompile" }
       defines { "ScarletNexus_RELEASE" }
       optimize "speed"
-    filter "configurations:Dist"
-      flags { "LinkTimeOptimization", "FatalWarnings", "NoManifest", "MultiProcessorCompile" }
-      defines { "ScarletNexus_DIST" }
-      optimize "speed"
+
+  project "scarlet-nexus-injector"
+	kind "ConsoleApp"
+	language "C++"
+	location "scarlet-nexus-injector"
+
+	characterset ("MBCS")
+
+	targetdir ("bin/%{cfg.buildcfg}")
+	objdir ("bin/obj/%{cfg.buildcfg}/%{prj.name}")
+
+	PrecompiledHeaderInclude = "common.hpp"
+	PrecompiledHeaderSource = "%{prj.name}/src/common.cpp"
+
+	includedirs
+	{
+	"%{prj.name}/src"
+	}
+
+	files
+	{
+	"%{prj.name}/src/**.hpp",
+	"%{prj.name}/src/**.h",
+	"%{prj.name}/src/**.cpp",
+        "%{prj.name}/src/**.rc",
+        "%{prj.name}/src/**.aps"
+	}
+
+	filter "configurations:Debug"
+	 defines { "DEBUG" }
+	 symbols "On"
+
+	filter "configurations:Release"
+	 defines { "NDEBUG" }
+	 optimize "On"
+
+    DeclareMSVCOptions()
+    DeclareDebugOptions()

@@ -35,7 +35,7 @@ namespace big
 
 	void detour_hook::enable()
 	{
-		if (auto status = MH_EnableHook(m_target); status == MH_OK)
+		if (auto status = MH_QueueEnableHook(m_target); status == MH_OK)
 		{
 			LOG(INFO_TO_FILE) << "Enabled hook '" << m_name << "'.";
 		}
@@ -47,7 +47,7 @@ namespace big
 
 	void detour_hook::disable()
 	{
-		if (auto status = MH_DisableHook(m_target); status == MH_OK)
+		if (auto status = MH_QueueDisableHook(m_target); status == MH_OK)
 		{
 			LOG(INFO_TO_FILE) << "Disabled hook '" << m_name << "'.";
 		}
