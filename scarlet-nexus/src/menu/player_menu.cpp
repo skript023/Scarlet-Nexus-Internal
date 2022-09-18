@@ -16,7 +16,6 @@ namespace big
         slot_6 = player::get_player_skill(6);
         slot_7 = player::get_player_skill(7);
         slot_8 = player::get_player_skill(8);
-        m_exp_multiplier = player::get_player_exp_multiplier();
     }
 
 	void player_menu::render_menu()
@@ -64,8 +63,7 @@ namespace big
 
             ImGui::PushItemWidth(200.f);
 
-            if (ImGui::SliderFloat("EXP Multiplier", &m_exp_multiplier, 1.0f, 1000.f))
-                unreal_engine::get_character_base()->m_gauge_base->m_battle_bonus_rate = m_exp_multiplier;
+            if (ImGui::SliderFloat("EXP Multiplier", player::player_exp_multiplier(), 1.0f, 1000.f))
 
             if (ImGui::Combo("Skill Slot 1", &slot_1, skill_list, IM_ARRAYSIZE(skill_list)))
                 player::modify_player_skill(1, slot_1);

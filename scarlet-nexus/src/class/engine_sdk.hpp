@@ -1,4 +1,5 @@
 #pragma once
+#include "unreal_engine_class.hpp"
 
 #pragma pack(push, 1)
 
@@ -14,7 +15,7 @@ struct SkillSlot
 	int8_t m_slot_8;
 };
 
-class SASStateBase
+class BP_SAS_PlayerState
 {
 public:
 	char pad_0000[0xE0];//0x0000
@@ -42,7 +43,7 @@ public:
 	class SkillCooldown m_skill_cooldown[0xFF]; //0x000C
 };
 
-class SASBase
+class SASRecastGauge
 {
 public:
 	char pad_0000[0xD8]; //0x0000
@@ -52,7 +53,7 @@ public:
 	int m_num_skill; //0x00F0
 };
 
-class PlayerGaugeBase
+class PlayerGauge
 {
 public:
 	char pad_0000[0xC8]; //0x0000
@@ -79,7 +80,7 @@ public:
 	CItemList m_item_list[0xFF]; //0x000C
 };
 
-class ItemUseRecastBase
+class ItemUseComponent
 {
 public:
 	char pad_0000[0xF8]; //0x0000
@@ -87,7 +88,7 @@ public:
 	int m_num_item; // 0x0100
 };
 
-class BrainDriveBase
+class PlayerDriveComponent
 {
 public:
 	char pad_0000[0x180]; //0x0000
@@ -104,7 +105,7 @@ public:
 	float drive_duration_timer_max; //0x0250
 };
 
-class CharacterParamBase
+class CharactersParameter
 {
 public:
 	char pad_0000[0x118]; //0x0000
@@ -113,14 +114,14 @@ public:
 	int m_health; //0x0310
 };
 
-class PlayerAbility
+class CharacterMovement
 {
 public:
 	char pad_0000[0x168]; //0x0000
 	float m_jump_velocity; //0x0168
 };
 
-class UserParams
+class UserParamManager
 {
 public:
 	char pad_0000[0x50]; //0x0000
@@ -129,7 +130,7 @@ public:
 	int m_skill_point; //0x02D0
 };
 
-class CharacterStats
+class DamageCalc
 {
 public:
 	char pad_0000[0xC0]; //0x0000
@@ -149,83 +150,70 @@ public:
 	float m_psy_dmg_factor_boss;
 };
 
-class CharacterParams
+class Character
 {
 public:
 	char pad_0000[0x298]; //0x0000
-	class PlayerAbility* m_ability; //0x0298
+	class CharacterMovement* m_ability; //0x0298
 	char pad_02A0[0x6A8]; //0x02A0
-	class CharacterParamBase* m_character_params; //0x0948
+	class CharactersParameter* m_character_params; //0x0948
 	char pad_0950[0x48]; //0x0950
 	uint64_t m_player_damage; //0x998
 	char pad_09A0[8]; //0x09A0
-	class CharacterStats* m_character_stats; //0x09A8
+	class DamageCalc* m_character_stats; //0x09A8
 	char pad_9B0[0x13C]; //0x09B0
 	int m_attack_power; //0x0AEC
 	int m_brain_attack_power; //0x0AF0
 	char pad_00AF4[0x574]; //0x0AF4
-	class BrainDriveBase* m_brain_drive; //0x1068
+	class PlayerDriveComponent* m_brain_drive; //0x1068
 	char pad_1070[0x100]; //0x1070
-	class ItemUseRecastBase* m_item_use_recast; //0x1170
+	class ItemUseComponent* m_item_use_recast; //0x1170
 	char pad_1178[0x20]; //0x1178
-	class PlayerGaugeBase* m_gauge_base; //0x1198
+	class PlayerGauge* m_gauge_base; //0x1198
 	char pad_11A0[0x20]; //0x11A0
-	class SASBase* m_sas_base; //0x11C0
+	class SASRecastGauge* m_sas_base; //0x11C0
 	char pad_11C8[0x60]; //0x11C8
-	class PlayerSprint* m_sprint; //0x1228
+	class SprintBP* m_sprint; //0x1228
 	char pad_1230[0x908]; //0x1230
-	class SASStateBase* m_sas_state; //0x1B38
+	class BP_SAS_PlayerState* m_sas_state; //0x1B38
 };
 
-class CharacterBase
+class PlayerController
 {
 public:
 	char pad_0000[0x270];
-	class CharacterParams* m_character;
+	class Character* m_character;
 };
 
-class PreCharacterBase
+class LocalPlayer
 {
 public:
 	char pad_0000[0x30];
-	class CharacterBase* m_get_character;
+	class PlayerController* m_get_character;
 };
 
-class EngineUser
-{
-public:
-	char pad_0000[0x80]; //0x0000
-	class UserParams* m_param_base;
-};
-
-class EngineCharacter
-{
-public:
-	class PreCharacterBase* m_param_base; //0x0000
-};
-
-class EngineGame
+class GameInstance
 {
 public:
 	char pad_0000[0x38]; //0x0000
-	class EngineCharacter* m_character_base; //0x0038
-	char pad_0040[664]; //0x0040
-	class EngineUser* m_user_params; //0x2D8
+	TArray<LocalPlayer*> m_character_base; //0x0038
+	char pad_0048[656]; //0x0048
+	TArray<UserParamManager*> m_manager; //0x2D8
 };
 
 class EngineBase
 {
 public:
 	char pad_0000[0xE08]; //0x0000
-	class EngineGame* m_game; //0x0E08
+	class GameInstance* m_game; //0x0E08
 };
 
-static_assert(sizeof(EngineGame) == 0x2E0, "EngineFirst not Properly sized");
-static_assert(sizeof(CharacterParams) == 0x1B40);
-static_assert(sizeof(UserParams) == 0x2D4);
+static_assert(sizeof(GameInstance) == 0x2E8, "EngineFirst not Properly sized");
+static_assert(sizeof(Character) == 0x1B40);
+static_assert(sizeof(UserParamManager) == 0x2D4);
 
-static_assert(sizeof(PlayerAbility) == 0x16C);
-static_assert(sizeof(CharacterParamBase) == 0x0314);
-static_assert(sizeof(BrainDriveBase) == 0x254);
+static_assert(sizeof(CharacterMovement) == 0x16C);
+static_assert(sizeof(CharactersParameter) == 0x0314);
+static_assert(sizeof(PlayerDriveComponent) == 0x254);
 
 #pragma pack(pop)

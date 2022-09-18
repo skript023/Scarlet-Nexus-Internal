@@ -96,12 +96,14 @@ namespace big::player
 		return 0.f;
 	}
 
-	inline float get_player_exp_multiplier()
+	inline float* player_exp_multiplier()
 	{
 		if (auto pychic_addr = unreal_engine::get_character_base())
-			return pychic_addr->m_gauge_base->m_battle_bonus_rate;
+		{
+			return &pychic_addr->m_gauge_base->m_battle_bonus_rate;
+		}
 
-		return 0.f;
+		return nullptr;
 	}
 
 	inline void remove_sas_cooldown(bool activate)

@@ -46,6 +46,8 @@ namespace big
 
 	pointers::~pointers()
 	{
+		free(this->m_swapchain_methods);
+		::DestroyWindow(this->m_window);
 		g_pointers = nullptr;
 	}
 
