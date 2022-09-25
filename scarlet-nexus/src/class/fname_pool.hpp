@@ -1,5 +1,5 @@
 #pragma once
-#include "fwddec.hpp"
+#include "unreal_engine_class.hpp"
 #include "static_indirect_array_thread_safe.hpp"
 
 namespace big
@@ -30,7 +30,7 @@ namespace big
             return Id;
         }
 
-        FORCEINLINE uint32_t to_unstable_int() const 
+        FORCEINLINE uint32_t to_unstable_int() const
         {
             return m_value;
         }
@@ -189,7 +189,7 @@ namespace big
         {
             if (handle.m_offset < 0 && handle.m_block > num_blocks() && handle.m_offset * stride < fname_block_offset)
             {
-                g_logger->error("Invalid FNameEntryHandle Passed To FNameEntryAllocator::Resolve.");
+                LOG(WARNING) << ("Invalid FNameEntryHandle Passed To FNameEntryAllocator::Resolve.");
                 return reinterpret_cast<FNameEntry*>(m_block[0] + 0);
             }
 
@@ -198,17 +198,17 @@ namespace big
 
         bool is_valid_index(int32_t key, uint32_t block, uint16_t offset) const
         {
-            return (key >= 0 && block < num_blocks() && offset * stride < block_size);
+            return (key >= 0 && block < num_blocks() && offset* stride < block_size);
         }
     };
 
-	class FNamePool
-	{
-	public:
-		FNameEntryAllocator m_entry_allocator;
-		uint32_t ansi_count;
-		uint32_t wide_count;
-	};
+    class FNamePool
+    {
+    public:
+        FNameEntryAllocator m_entry_allocator;
+        uint32_t ansi_count;
+        uint32_t wide_count;
+    };
 
     class FName
     {

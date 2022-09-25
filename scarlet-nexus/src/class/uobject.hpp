@@ -1,5 +1,5 @@
 #pragma once
-#include "fwddec.hpp"
+#include "unreal_engine_class.hpp"
 #include "fname_pool.hpp"
 
 namespace big
@@ -30,7 +30,7 @@ namespace big
 		int32_t m_flags; //0x0008
 		int32_t m_cluster_index; //0x000C
 		int32_t m_serial_number; //0x0010
-		
+
 		inline bool is_unreachable() const
 		{
 			return !!(m_flags & static_cast<std::underlying_type_t<EInternalObjectFlags>>(EInternalObjectFlags::Unreachable));
@@ -172,7 +172,7 @@ namespace big
 			for (int i = 0; i < get_global_object()->num(); ++i)
 			{
 				auto object = get_global_object()->get_by_index(i);
-				
+
 				if (object)
 				{
 					if (object->get_fullname() == name)

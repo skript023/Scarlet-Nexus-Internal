@@ -9,15 +9,30 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		while (!swapchain_found)
+		for (int i = 0; i <= 5 && !swapchain_found; i++)
 		{
 			swapchain_found = this->get_swapchain();
-			std::this_thread::sleep_for(100ms);
+			std::this_thread::sleep_for(1000ms);
 		}
 		
 		main_batch.add("Engine", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 ? 74 ? 33 DB", [this](memory::handle ptr)
 		{
 			m_engine = ptr.add(3).rip().as<decltype(m_engine)>();
+		});
+
+		main_batch.add("Process Event", "E8 ? ? ? ? 48 8B 74 24 ? 48 8B 5C 24 ? 48 8B 6C 24 ? 48 83 C4 20 5F C3 40 57", [this](memory::handle ptr)
+		{
+			m_process_event = ptr.add(1).rip().as<decltype(m_process_event)>();
+		});
+
+		main_batch.add("GUObjectArray", "48 8B 05 ? ? ? ? C1 F9 10 48 63 C9 48 8B 14 C8 4B 8D 0C 40 4C 8D 04 CA EB 03", [this](memory::handle ptr)
+		{
+			m_object_array = ptr.add(3).rip().as<decltype(m_object_array)>();
+		});
+
+		main_batch.add("FName Pool", "48 8D 0D ? ? ? ? E8 ? ? ? ? C6 05 ? ? ? ? ? 0F 10 03 4C 8D 44 24 ? 48 8B C8 48 8D 54 24 ? 0F 29 44 24", [this](memory::handle ptr)
+		{
+			m_name = ptr.add(3).rip().as<decltype(m_name)>();
 		});
 
 		main_batch.add("Battle Points Hanlder", "48 89 ? ? ? 57 48 83 EC ? 8B FA 48 8B ? E8 ? ? ? ? 3C ? 75 ? 8B 93", [this](memory::handle ptr)
@@ -36,6 +51,9 @@ namespace big
 		});
 		
 		main_batch.run(memory::module(nullptr));
+
+		//ScarletNexus.exe+4E91CA0 / 7FF7CA081CA0 UObject
+		//ScarletNexus.exe+4E65E00 / 7FF7CA055E00 FNamePool
 
 		this->m_hwnd = FindWindowW(L"UnrealWindow", L"ScarletNexus  ");
 		if (!this->m_hwnd)

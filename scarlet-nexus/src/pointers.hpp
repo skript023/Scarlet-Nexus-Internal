@@ -1,5 +1,6 @@
 #pragma once
 #include "common.hpp"
+#include "function_types.hpp"
 #include "class/engine_sdk.hpp"
 
 namespace big
@@ -15,6 +16,9 @@ namespace big
 		void* m_swapchain_methods[19];
 
 		EngineBase** m_engine{};
+		FUObjectArray* m_object_array{};
+		FNamePool* m_name{};
+		functions::process_event_t m_process_event{};
 		PVOID m_battle_points_handle;
 		PVOID m_credits_handle;
 		PVOID m_items_handle;
