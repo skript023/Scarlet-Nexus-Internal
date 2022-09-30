@@ -10,7 +10,7 @@
 #include <imgui_internal.h>
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-//CW.exe+2D4E21610
+
 namespace big
 {
 	renderer::renderer()
@@ -23,10 +23,6 @@ namespace big
 		ImGui_ImplWin32_Shutdown();
 		ImGui_ImplDX11_Shutdown();
 		ImGui::DestroyContext();
-
-		m_d3d_device->Release();
-		m_d3d_context->Release();
-		m_d3d_render_target->Release();
 
 		g_renderer = nullptr;
 	}

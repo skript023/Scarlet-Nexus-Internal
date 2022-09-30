@@ -64,8 +64,6 @@ namespace big
 
 	pointers::~pointers()
 	{
-		free(this->m_swapchain_methods);
-		::DestroyWindow(this->m_window);
 		g_pointers = nullptr;
 	}
 
@@ -150,13 +148,13 @@ namespace big
 		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
 
 		this->m_swapchain->Release();
-		this->m_swapchain = NULL;
+		this->m_swapchain = nullptr;
 
 		this->m_d3d_device->Release();
-		this->m_d3d_device = NULL;
+		this->m_d3d_device = nullptr;
 
 		this->m_d3d_context->Release();
-		this->m_d3d_context = NULL;
+		this->m_d3d_context = nullptr;
 
 		::DestroyWindow(this->m_window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);

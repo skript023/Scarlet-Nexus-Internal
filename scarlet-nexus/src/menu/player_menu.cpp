@@ -63,7 +63,8 @@ namespace big
 
             ImGui::PushItemWidth(200.f);
 
-            if (ImGui::SliderFloat("EXP Multiplier", player::player_exp_multiplier(), 1.0f, 1000.f))
+            if (ImGui::SliderFloat("EXP Multiplier", &m_exp_multiplier, 1.0f, 1000.f))
+                *player::player_exp_multiplier() = m_exp_multiplier;
 
             if (ImGui::Combo("Skill Slot 1", &slot_1, skill_list, IM_ARRAYSIZE(skill_list)))
                 player::modify_player_skill(1, slot_1);
