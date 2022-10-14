@@ -99,8 +99,8 @@ namespace big
 					auto timet = to_time_t(file_time);
 					auto local_time = std::localtime(&timet);
 
-					auto bigbase_timestamp = fmt::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} BigBaseV2.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
-					auto gta_events_timestamp = fmt::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} GTAEvents.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
+					auto bigbase_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} BigBaseV2.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
+					auto gta_events_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} GTAEvents.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
 
 					std::filesystem::copy_file(m_file_path, m_backup_path / bigbase_timestamp);
 					if (std::filesystem::exists(m_event_file_path) && !std::filesystem::is_empty(m_event_file_path))
@@ -188,7 +188,7 @@ namespace big
 		template <typename ...Args>
 		inline void log_now(std::string_view format, Args const& ...args)
 		{
-			auto message = fmt::format(format, args...);
+			auto message = std::format(format, args...);
 			if (m_file_out)
 				m_file_out << message << std::endl << std::flush;
 		}

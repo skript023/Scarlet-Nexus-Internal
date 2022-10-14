@@ -48,7 +48,6 @@
 #include <regex>
 #include <tlhelp32.h>
 
-#include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
 #include "logger.hpp"

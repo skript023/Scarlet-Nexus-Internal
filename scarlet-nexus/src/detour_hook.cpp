@@ -19,7 +19,7 @@ namespace big
 		}
 		else
 		{
-			throw std::runtime_error(fmt::format("Failed to create hook '{}' at 0x{:X} (error: {})", m_name, reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
+			throw std::runtime_error(std::format("Failed to create hook '{}' at 0x{:X} (error: {})", m_name, reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
 		}
 	}
 
@@ -41,7 +41,7 @@ namespace big
 		}
 		else
 		{
-			throw std::runtime_error(fmt::format("Failed to enable hook 0x{:X} ({})", reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
+			throw std::runtime_error(std::format("Failed to enable hook 0x{:X} ({})", reinterpret_cast<std::uintptr_t>(m_target), MH_StatusToString(status)));
 		}
 	}
 
@@ -80,7 +80,7 @@ namespace big
 		{
 			[this]()
 			{
-				throw std::runtime_error(fmt::format("Failed to fix hook address for '{}'", m_name));
+				throw std::runtime_error(std::format("Failed to fix hook address for '{}'", m_name));
 			}();
 		}
 	}

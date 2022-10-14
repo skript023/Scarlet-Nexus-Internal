@@ -9,10 +9,9 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		for (int i = 0; i <= 5 && !swapchain_found; i++)
+		if (!this->get_swapchain())
 		{
-			swapchain_found = this->get_swapchain();
-			std::this_thread::sleep_for(1000ms);
+			throw std::runtime_error("Failed get swapchain!");
 		}
 		
 		main_batch.add("Engine", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 ? 74 ? 33 DB", [this](memory::handle ptr)
@@ -51,9 +50,6 @@ namespace big
 		});
 		
 		main_batch.run(memory::module(nullptr));
-
-		//ScarletNexus.exe+4E91CA0 / 7FF7CA081CA0 UObject
-		//ScarletNexus.exe+4E65E00 / 7FF7CA055E00 FNamePool
 
 		this->m_hwnd = FindWindowW(L"UnrealWindow", L"ScarletNexus  ");
 		if (!this->m_hwnd)

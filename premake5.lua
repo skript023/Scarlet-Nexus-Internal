@@ -10,7 +10,6 @@ workspace "scarlet-nexus"
   outputdir = "%{cfg.buildcfg}"
 
   IncludeDir = {}
-  IncludeDir["fmt"] = "vendor/fmt/include"
   IncludeDir["json"] = "vendor/json/single_include"
   IncludeDir["MinHook"] = "vendor/MinHook/include"
   IncludeDir["ImGui"] = "vendor/ImGui"
@@ -82,28 +81,6 @@ workspace "scarlet-nexus"
     includedirs
     {
       "vendor/%{prj.name}"
-    }
-
-    DeclareMSVCOptions()
-    DeclareDebugOptions()
-
-  project "fmt"
-    location "vendor/%{prj.name}"
-    kind "StaticLib"
-    language "C++"
-
-    targetdir ("bin/lib/" .. outputdir)
-    objdir ("bin/lib/int/" .. outputdir .. "/%{prj.name}")
-
-    files
-    {
-      "vendor/%{prj.name}/include/**.h",
-      "vendor/%{prj.name}/src/**.cc"
-    }
-
-    includedirs
-    {
-      "vendor/%{prj.name}/include"
     }
 
     DeclareMSVCOptions()
@@ -199,7 +176,6 @@ workspace "scarlet-nexus"
 
     links
     {
-      "fmt",
       "MinHook",
       "ImGui",
       "g3log"
@@ -243,11 +219,11 @@ workspace "scarlet-nexus"
 
 	files
 	{
-	"%{prj.name}/src/**.hpp",
-	"%{prj.name}/src/**.h",
-	"%{prj.name}/src/**.cpp",
-        "%{prj.name}/src/**.rc",
-        "%{prj.name}/src/**.aps"
+  	"%{prj.name}/src/**.hpp",
+  	"%{prj.name}/src/**.h",
+  	"%{prj.name}/src/**.cpp",
+    "%{prj.name}/src/**.rc",
+    "%{prj.name}/src/**.aps"
 	}
 
 	filter "configurations:Debug"
