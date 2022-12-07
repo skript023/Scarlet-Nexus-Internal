@@ -12,6 +12,6 @@ namespace big
 				
 			}
 		}
-		return g_hooking->m_process_event_hook.get_original<decltype(&process_event)>()(_this, function, parms);
+		return g_hooking->get_original<&process_event>()(_this, function, parms);
 	}
 }
