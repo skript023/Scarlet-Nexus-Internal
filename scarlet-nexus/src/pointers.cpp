@@ -50,6 +50,11 @@ namespace big
 			m_items_handle = ptr.as<decltype(m_items_handle)>();
 		});
 		
+		main_batch.add("Return Address", "FF 23", [this](memory::handle ptr)
+		{
+			m_return_address = ptr.as<decltype(m_return_address)>();
+		});
+		
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindowW(L"UnrealWindow", L"ScarletNexus  ");

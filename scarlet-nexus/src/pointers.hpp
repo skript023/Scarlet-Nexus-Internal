@@ -22,6 +22,7 @@ namespace big
 		PVOID m_battle_points_handle;
 		PVOID m_credits_handle;
 		PVOID m_items_handle;
+		PVOID m_return_address;
 	private:
 		bool get_swapchain();
 		bool swapchain_found = false;

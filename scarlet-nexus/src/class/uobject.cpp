@@ -1,4 +1,5 @@
 #include "uobject.hpp"
+#include <return_address.hpp>
 #include <pointers.hpp>
 
 namespace big
@@ -54,7 +55,7 @@ namespace big
 
 	void UObject::process_event(UFunction* function, void* parms)
 	{
-		return GetVFunction<void(*)(UObject*, UFunction*, void*)>(this, 0x43)(this, function, parms);
+		return return_address::spoof_call(g_pointers->m_return_address, GetVFunction<void(*)(UObject*, UFunction*, void*)>(this, 0x43), this, function, parms);
 	}
 
 	UObject* FUObjectItem::get_valid_object()
