@@ -1,4 +1,5 @@
 #pragma once
+#include <polyhook2/Detour/NatDetour.hpp>
 
 namespace big
 {
@@ -24,6 +25,7 @@ namespace big
 		std::string m_name;
 		void *m_target;
 		void *m_detour;
+		std::unique_ptr<PLH::x64Detour> m_polyhook;
 		void *m_original{};
 	};
 

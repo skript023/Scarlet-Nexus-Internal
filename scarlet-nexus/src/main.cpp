@@ -7,6 +7,7 @@
 #include "renderer.hpp"
 #include "script_mgr.hpp"
 #include "settings.hpp"
+#include "benchmark.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -15,20 +16,18 @@ DWORD APIENTRY main_thread(LPVOID)
 	while (!FindWindow(L"UnrealWindow", L"ScarletNexus  "))
 		std::this_thread::sleep_for(1s);
 
+	benchmark initialization_benchmark("Initialization");
+
 	auto logger_instance = std::make_unique<logger>();
 	try
 	{
 		LOG(RAW_GREEN_TO_CONSOLE) << R"kek(
- ________  ________  ________  ________  ___       _______  _________        ________   _______      ___    ___ ___  ___  ________      
-|\   ____\|\   ____\|\   __  \|\   __  \|\  \     |\  ___ \|\___   ___\     |\   ___  \|\  ___ \    |\  \  /  /|\  \|\  \|\   ____\     
-\ \  \___|\ \  \___|\ \  \|\  \ \  \|\  \ \  \    \ \   __/\|___ \  \_|     \ \  \\ \  \ \   __/|   \ \  \/  / | \  \\\  \ \  \___|_    
- \ \_____  \ \  \    \ \   __  \ \   _  _\ \  \    \ \  \_|/__  \ \  \       \ \  \\ \  \ \  \_|/__  \ \    / / \ \  \\\  \ \_____  \   
-  \|____|\  \ \  \____\ \  \ \  \ \  \\  \\ \  \____\ \  \_|\ \  \ \  \       \ \  \\ \  \ \  \_|\ \  /     \/   \ \  \\\  \|____|\  \  
-    ____\_\  \ \_______\ \__\ \__\ \__\\ _\\ \_______\ \_______\  \ \__\       \ \__\\ \__\ \_______\/  /\   \    \ \_______\____\_\  \ 
-   |\_________\|_______|\|__|\|__|\|__|\|__|\|_______|\|_______|   \|__|        \|__| \|__|\|_______/__/ /\ __\    \|_______|\_________\
-   \|_________|                                                                                     |__|/ \|__|             \|_________|
-                                                                                                                                        
-                                                                                                                                        
+  _____                _      _   _   _                  _______        _                 
+ / ____|              | |    | | | \ | |                |__   __|      (_)                
+| (___   ___ __ _ _ __| | ___| |_|  \| | _____  ___   _ ___| |_ __ __ _ _ _ __   ___ _ __ 
+ \___ \ / __/ _` | '__| |/ _ \ __| . ` |/ _ \ \/ / | | / __| | '__/ _` | | '_ \ / _ \ '__|
+ ____) | (_| (_| | |  | |  __/ |_| |\  |  __/>  <| |_| \__ \ | | | (_| | | | | |  __/ |   
+|_____/ \___\__,_|_|  |_|\___|\__|_| \_|\___/_/\_,\____|___/_|_|  \__,_|_|_| |_|\___|_| 
 )kek";
 		auto settings_instance = std::make_unique<settings>();
 		g_settings->load();
@@ -54,6 +53,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		g_hooking->enable();
 		LOG(HACKER) << "Hooking enabled.";
+
+		initialization_benchmark.get_runtime();
+		initialization_benchmark.reset();
 
 		while (g_running)
 		{

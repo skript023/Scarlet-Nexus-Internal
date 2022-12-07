@@ -9,9 +9,10 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		if (!this->get_swapchain())
+		for (int i = 0; i <= 5 && !swapchain_found; i++)
 		{
-			throw std::runtime_error("Failed get swapchain!");
+			swapchain_found = this->get_swapchain();
+			std::this_thread::sleep_for(1000ms);
 		}
 		
 		main_batch.add("Engine", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 ? 74 ? 33 DB", [this](memory::handle ptr)

@@ -162,10 +162,6 @@ namespace big
 
 		std::string get_fullname() const;
 
-		const char* get_name_ex() const;
-
-		const char* get_fullname_ex() const;
-
 		template<typename T>
 		inline static T find_object(const std::string& name)
 		{
@@ -210,7 +206,6 @@ namespace big
 		}
 
 		void process_event(UFunction* function, void* parms);
-		void Process_event(UFunction* func, void* params);
 	};
 	static_assert(sizeof(UObject) == 0x28, "UObject not properly sized.");
 

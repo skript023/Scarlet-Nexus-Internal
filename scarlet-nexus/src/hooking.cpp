@@ -7,7 +7,6 @@
 #include "pointers.hpp"
 #include "renderer.hpp"
 
-#include <MinHook.h>
 
 namespace big
 {
@@ -55,12 +54,12 @@ namespace big
 
 	minhook_keepalive::minhook_keepalive()
 	{
-		MH_Initialize();
+
 	}
 
 	minhook_keepalive::~minhook_keepalive()
 	{
-		MH_Uninitialize();
+
 	}
 
 	void *hooks::convert_thread_to_fiber(void *param)

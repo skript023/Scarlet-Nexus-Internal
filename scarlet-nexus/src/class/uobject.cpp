@@ -57,11 +57,6 @@ namespace big
 		return GetVFunction<void(*)(UObject*, UFunction*, void*)>(this, 0x43)(this, function, parms);
 	}
 
-	void UObject::Process_event(UFunction* func, void* params)
-	{
-		return big::g_pointers->m_process_event(this, func, params);
-	}
-
 	UObject* FUObjectItem::get_valid_object()
 	{
 		if (IsBadReadPtr(this, sizeof(this)) || IsBadReadPtr(this->m_object, sizeof(this->m_object)))
