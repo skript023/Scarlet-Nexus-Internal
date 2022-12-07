@@ -24,12 +24,13 @@ namespace big
 		PVOID m_items_handle;
 		PVOID m_return_address;
 	private:
+		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();
 		bool swapchain_found = false;
 		HWND m_window;
-		IDXGISwapChain* m_swapchain;
-		ID3D11Device* m_d3d_device;
-		ID3D11DeviceContext* m_d3d_context;
+		IDXGISwapChain* m_swapchain = nullptr;
+		ID3D11Device* m_d3d_device = nullptr;
+		ID3D11DeviceContext* m_d3d_context = nullptr;
 	public:
 		inline DWORD get_process_id(LPCWSTR ProcessName)
 		{

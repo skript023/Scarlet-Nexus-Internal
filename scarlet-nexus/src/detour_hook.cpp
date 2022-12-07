@@ -1,3 +1,4 @@
+#include <pointers.hpp>
 #include "common.hpp"
 #include "detour_hook.hpp"
 #include "logger.hpp"
@@ -69,9 +70,15 @@ namespace big
 		__try
 		{
 			auto ptr = memory::handle(m_target);
+
 			while (ptr.as<std::uint8_t&>() == 0xE9)
 			{
 				ptr = ptr.add(1).rip();
+
+				if (m_target == g_pointers->m_swapchain_methods[8])
+				{
+					throw std::runtime_error("Swapchain on present function has already been hooked by another program.");
+				}
 			}
 
 			m_target = ptr.as<void*>();

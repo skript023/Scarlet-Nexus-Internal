@@ -136,7 +136,8 @@ namespace big
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		HRESULT hr = ((long(__stdcall*)(IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT, const D3D_FEATURE_LEVEL*, UINT, UINT, const DXGI_SWAP_CHAIN_DESC*, IDXGISwapChain**, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**))(D3D11CreateDeviceAndSwapChain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
+		HRESULT hr = ((functions::create_d3d11_device_and_swapchain_t)(D3D11CreateDeviceAndSwapChain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
+		
 		if (FAILED(hr))
 		{
 			::DestroyWindow(this->m_window);
@@ -144,16 +145,19 @@ namespace big
 			return false;
 		}
 
+		if (!this->m_swapchain || !this->m_d3d_device || !this->m_d3d_context)
+			return false;
+
 		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
 
 		this->m_swapchain->Release();
-		this->m_swapchain = NULL;
+		this->m_swapchain = nullptr;
 
 		this->m_d3d_device->Release();
-		this->m_d3d_device = NULL;
+		this->m_d3d_device = nullptr;
 
 		this->m_d3d_context->Release();
-		this->m_d3d_context = NULL;
+		this->m_d3d_context = nullptr;
 
 		::DestroyWindow(this->m_window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
