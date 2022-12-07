@@ -30,13 +30,18 @@ jobs:
         ls .premake
         premake5 vs2022
         
-    - name: Build scalet-nexus
+    - name: Build scarlet-nexus
       shell: cmd
-      run: 'msbuild scalet-nexus/scalet-nexus.vcxproj /p:Platform=x64 /p:Configuration=Release'
-
+      run: 'msbuild scarlet-nexus/scarlet-nexus.vcxproj /p:Platform=x64 /p:Configuration=Release'
+        
+    - name: Build scarlet-nexus-injector
+      shell: cmd
+      run: 'msbuild scarlet-nexus-injector/scarlet-nexus-injector.vcxproj /p:Platform=x64 /p:Configuration=Release'
+      
     - name: Upload binaries to GitHub
       uses: actions/upload-artifact@v2
       with:
-        name: scalet-nexus
+        name: scarlet-nexus
         path: |
-          bin/Release/scalet-nexus.dll
+          bin/Release/scarlet-nexus.dll
+          bin/Release/scarlet-nexus-injector.exe
