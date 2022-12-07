@@ -1,8 +1,7 @@
-#include "imgui.h"
-#include "renderer.hpp"
+#include <imgui.h>
 #include <pointers.hpp>
-#include "utility/subprocess.hpp"
-#include "menu/navigation_menu.h"
+#include <utility/subprocess.hpp>
+#include <menu/navigation_menu.h>
 
 
 namespace big
@@ -89,9 +88,11 @@ namespace big
 		if (ImGui::Begin("main", nullptr, window_flags))
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, alpha);
-			ImGui::PushFont(g_renderer->m_title);
+
+			ImGui::PushFont(g_settings->window.font_title);
 			ImGui::TextWrapped(g_gui_service->get_selected()->name);
 			ImGui::PopFont();
+
 			ImGui::Separator();
 			g_gui_service->get_selected()->func();
 			ImGui::PopStyleVar();

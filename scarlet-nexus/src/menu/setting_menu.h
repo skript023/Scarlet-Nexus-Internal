@@ -7,5 +7,6 @@ namespace big
 	{
 	public:
 		static void render_menu();
+		static void gui_settings();
 	};
 }

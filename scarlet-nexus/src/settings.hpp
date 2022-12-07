@@ -1,5 +1,6 @@
 #pragma once
 #include "logger.hpp"
+#include "imgui.h"
 
 namespace big
 {
@@ -24,12 +25,17 @@ namespace big
 			bool infinite_health{ false };
 		};
 
-		struct weapons
+		struct window
 		{
-			bool unlimited_ammo = false;
-			bool unlimited_clip = false;
-			bool unlimited_lethals = false;
-			bool unlimited_tacticals = false;
+			ImU32 color = 3357612055;
+			float gui_scale = 1.f;
+
+			ImFont* font_title = nullptr;
+			ImFont* font_sub_title = nullptr;
+			ImFont* font_small = nullptr;
+			ImFont* font_icon = nullptr;
+
+			bool switched_view = true;
 		};
 	public:
 		settings()
@@ -43,7 +49,7 @@ namespace big
 		}
 
 		self self{};
-		weapons weapons{};
+		window window{};
 
 		void from_json(const nlohmann::json& j)
 		{
@@ -57,6 +63,9 @@ namespace big
 			this->self.enter_brain_dive = j["self"]["enter_brain_dive"];
 			this->self.infinite_credits = j["self"]["infinite_credits"];
 			this->self.infinite_health = j["self"]["infinite_health"];
+
+			this->window.color = j["window"]["color"];
+			this->window.gui_scale = j["window"]["gui_scale"];
 		}
 
 		nlohmann::json to_json()
@@ -74,6 +83,12 @@ namespace big
 						{ "enter_brain_dive", this->self.enter_brain_dive },
 						{ "infinite_credits", this->self.infinite_credits },
 						{ "infinite_health", this->self.infinite_health}
+					}
+				},
+				{
+					"window", {
+						{ "color", this->window.color },
+						{ "gui_scale", this->window.gui_scale }
 					}
 				}
 			};

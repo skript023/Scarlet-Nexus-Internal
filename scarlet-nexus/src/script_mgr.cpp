@@ -18,7 +18,7 @@ namespace big
 
 	void script_mgr::tick()
 	{
-		std::invoke(std::mem_fn(&script_mgr::tick_internal), this);
+		execute_as_script(std::mem_fn(&script_mgr::tick_internal), this);
 	}
 
 	void script_mgr::tick_internal()

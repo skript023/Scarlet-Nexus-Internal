@@ -50,6 +50,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "settings.hpp"
 #include "logger.hpp"
 
 #define MOD_NAME "Ellohim Private Menu"

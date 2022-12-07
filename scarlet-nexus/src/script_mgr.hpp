@@ -16,6 +16,11 @@ namespace big
 		void tick();
 	private:
 		void tick_internal();
+		template <typename F, typename ...Args>
+		void execute_as_script(F&& callback, Args &&...args)
+		{
+			std::invoke(std::forward<F>(callback), std::forward<Args>(args)...);
+		}
 	private:
 		std::recursive_mutex m_mutex;
 		std::vector<std::unique_ptr<script>> m_scripts;

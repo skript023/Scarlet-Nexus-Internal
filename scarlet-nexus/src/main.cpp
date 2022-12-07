@@ -63,8 +63,8 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		while (g_running)
 		{
-			g_script_mgr.tick();
-			std::this_thread::sleep_for(0ms);
+			//g_script_mgr.tick();
+			std::this_thread::sleep_for(1s);
 		}
 
 		g_hooking->disable();

@@ -207,17 +207,17 @@ namespace big
 	class EngineBase : public UObject
 	{
 	public:
-		char pad_0000[0xDE0]; //0x0000
+		char pad_0028[0xDE0]; //0x0028
 		class GameInstance* m_game; //0x0E08
 	};
 
-	static_assert(sizeof(GameInstance) == 0x2E8, "EngineFirst not Properly sized");
+	static_assert(sizeof(GameInstance) == 0x2E8, "GameInstance not Properly sized");
 	static_assert(sizeof(Character) == 0x1B40);
 	static_assert(sizeof(UserParamManager) == 0x2D4);
 
 	static_assert(sizeof(CharacterMovement) == 0x16C);
 	static_assert(sizeof(CharactersParameter) == 0x0314);
 	static_assert(sizeof(PlayerDriveComponent) == 0x254);
-
+	static_assert(sizeof(EngineBase) == 0xE10);
 #pragma pack(pop)
 }

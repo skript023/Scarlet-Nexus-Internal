@@ -11,7 +11,9 @@ namespace big
 		PLAYER_MENU,
 		PLAYER_STAT,
 		ITEM_MANAGER,
+
 		SETTING,
+		GUI_SETTINGS,
 
 		PLAYER,
 		DEBUG
@@ -39,8 +41,8 @@ namespace big
 			{tabs::ITEM_MANAGER, { "Item Manager", nullptr, {
 				
 			}}},
-			{tabs::SETTING, { "Settings", setting_menu::render_menu, {
-				
+			{tabs::SETTING, { "Settings", nullptr, {
+				{ tabs::GUI_SETTINGS, { "Menu Settings", setting_menu::gui_settings}},
 			}}},
 		};
 	public:
