@@ -20,7 +20,7 @@ DWORD APIENTRY main_thread(LPVOID)
 
 	benchmark initialization_benchmark("Initialization");
 
-	auto logger_instance = std::make_unique<logger>();
+	auto logger_instance = std::make_unique<logger>("Scarlet Nexus");
 	try
 	{
 		LOG(RAW_GREEN_TO_CONSOLE) << R"kek(

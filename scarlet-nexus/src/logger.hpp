@@ -50,17 +50,29 @@ namespace big
 	class logger
 	{
 	public:
-		explicit logger() :
+		explicit logger(std::string_view logger_name) :
+			m_console_name(logger_name),
 			m_file_path(std::getenv("appdata")),
 			m_worker(g3::LogWorker::createLogWorker())
 		{
-			if ((m_did_console_exist = AttachConsole(GetCurrentProcessId())) == false)
+			if (m_did_console_exist = AttachConsole(GetCurrentProcessId()); !m_did_console_exist)
 				AllocConsole();
 
-			if ((m_console_handle = GetStdHandle(STD_OUTPUT_HANDLE)) != nullptr)
+			if (m_console_handle = GetStdHandle(STD_OUTPUT_HANDLE); m_console_handle != nullptr)
 			{
-				SetConsoleTitleA("BigBaseV2");
+				SetConsoleTitleA(m_console_name.data());
 				SetConsoleOutputCP(CP_UTF8);
+
+				DWORD console_mode;
+				GetConsoleMode(m_console_handle, &console_mode);
+				m_original_console_mode = console_mode;
+
+				// terminal like behaviour enable full color support
+				console_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
+				// prevent clicking in terminal from suspending our main thread
+				console_mode &= ~(ENABLE_QUICK_EDIT_MODE);
+
+				SetConsoleMode(m_console_handle, console_mode);
 
 				m_console_out.open("CONOUT$", std::ios_base::out | std::ios_base::app);
 			}
@@ -195,6 +207,8 @@ namespace big
 		
 	private:
 		bool m_did_console_exist{};
+		std::string_view m_console_name;
+		DWORD m_original_console_mode;
 		HANDLE m_console_handle{};
 		std::ofstream m_console_out;
 		std::filesystem::path m_file_path;

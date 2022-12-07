@@ -1,3 +1,5 @@
+<p align="center"><a title="Jeremy Kratz, Public domain, via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:ISO_C%2B%2B_Logo.svg"><img width="256" alt="ISO C++ Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/256px-ISO_C%2B%2B_Logo.svg.png"></a></p>
+
 <h1 align="center">Scarlet Nexus Trainer Internal</h1>
 <p align="center">
   <a href="https://github.com/skript023/Scarlet-Nexus-Internal/blob/main/LICENSE">
