@@ -22,7 +22,6 @@ namespace big
 		static BOOL set_cursor_pos(int x, int y);
 
 		static void APIENTRY process_event(UObject* _this, UFunction* function, void* parms);
-		static int8_t __fastcall main_hook(int64_t a1, int64_t a2, int a3);
 	};
 
 	struct minhook_keepalive
@@ -51,7 +50,6 @@ namespace big
 		detour_hook m_swapchain_resizebuffers_hook;
 		detour_hook m_set_cursor_pos_hook;
 		detour_hook m_process_event_hook;
-		detour_hook m_main_hook;
 	};
 
 	inline hooking* g_hooking{};

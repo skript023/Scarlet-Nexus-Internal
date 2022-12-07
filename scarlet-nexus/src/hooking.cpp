@@ -16,8 +16,7 @@ namespace big
 		m_swapchain_resizebuffers_hook("SwapChainResizeBuffers", g_pointers->m_swapchain_methods[hooks::swapchain_resizebuffers_index], &hooks::swapchain_resizebuffers),
 		m_set_cursor_pos_hook("SetCursorPos", memory::module("user32.dll").get_export("SetCursorPos").as<void*>(), &hooks::set_cursor_pos),
 		m_convert_thread_to_fiber_hook("ConvertThreadToFiber", memory::module("kernel32.dll").get_export("ConvertThreadToFiber").as<void*>(), &hooks::convert_thread_to_fiber),
-		m_process_event_hook("Process Event", g_pointers->m_process_event, &hooks::process_event),
-		m_main_hook("Cri Mana Sound", g_pointers->m_main_hook, &hooks::main_hook)
+		m_process_event_hook("Process Event", g_pointers->m_process_event, &hooks::process_event)
 	{
 		g_hooking = this;
 	}
@@ -38,7 +37,6 @@ namespace big
 		m_set_cursor_pos_hook.enable();
 		m_convert_thread_to_fiber_hook.enable();
 		m_process_event_hook.enable();
-		m_main_hook.enable();
 
 		m_enabled = true;
 	}
@@ -47,7 +45,6 @@ namespace big
 	{
 		m_enabled = false;
 
-		m_main_hook.disable();
 		m_process_event_hook.disable();
 		m_convert_thread_to_fiber_hook.disable();
 		m_set_cursor_pos_hook.disable();

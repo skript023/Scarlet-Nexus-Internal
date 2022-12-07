@@ -25,7 +25,6 @@ namespace big
 		PVOID m_credits_handle;
 		PVOID m_items_handle;
 		PVOID m_return_address;
-		PVOID m_main_hook;
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

@@ -1,11 +1,8 @@
 #include "hooking.hpp"
 #include "script_mgr.hpp"
-#include "memory/module.hpp"
 
 namespace big
 {
-	DWORD64 base_address = memory::module("ScarletNexus-Win64-Shipping.exe").begin().as<DWORD64>();
-
 	void APIENTRY hooks::process_event(UObject* _this, UFunction* function, void* parms)
 	{
 		if (g_running)

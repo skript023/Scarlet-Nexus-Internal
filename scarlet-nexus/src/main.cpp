@@ -8,6 +8,7 @@
 #include "script_mgr.hpp"
 #include "settings.hpp"
 #include "benchmark.hpp"
+#include "event_loop/backend_events.hpp"
 #include "services/gui/gui_service.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
@@ -53,6 +54,8 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(HACKER) << "Service registered.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
+		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_skill_event));
+		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
 		LOG(HACKER) << "Scripts registered.";
 
 		g_hooking->enable();
