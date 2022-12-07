@@ -111,6 +111,15 @@ namespace big
 				player::item_usage_no_cooldown(g_settings->self.no_items_cooldown);
 				player::infinite_player_credits(g_settings->self.infinite_credits);
 				player::infinite_health(g_settings->self.infinite_health);
+
+				g_settings->skill.slot_1 = player::get_player_skill(1);
+				g_settings->skill.slot_2 = player::get_player_skill(2);
+				g_settings->skill.slot_3 = player::get_player_skill(3);
+				g_settings->skill.slot_4 = player::get_player_skill(4);
+				g_settings->skill.slot_5 = player::get_player_skill(5);
+				g_settings->skill.slot_6 = player::get_player_skill(6);
+				g_settings->skill.slot_7 = player::get_player_skill(7);
+				g_settings->skill.slot_8 = player::get_player_skill(8);
 			}
 		}
 		EXCEPT_CLAUSE

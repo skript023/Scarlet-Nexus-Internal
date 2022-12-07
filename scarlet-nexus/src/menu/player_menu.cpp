@@ -8,14 +8,7 @@ namespace big
 {
     void player_menu::add_value()
     {
-        slot_1 = player::get_player_skill(1);
-        slot_2 = player::get_player_skill(2);
-        slot_3 = player::get_player_skill(3);
-        slot_4 = player::get_player_skill(4);
-        slot_5 = player::get_player_skill(5);
-        slot_6 = player::get_player_skill(6);
-        slot_7 = player::get_player_skill(7);
-        slot_8 = player::get_player_skill(8);
+        
     }
 
 	void player_menu::render_menu()
@@ -63,29 +56,29 @@ namespace big
 
         ImGui::SliderFloat("EXP Multiplier", player::player_exp_multiplier(), 1.0f, 1000.f);
 
-        if (ImGui::Combo("Skill Slot 1", &slot_1, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(1, slot_1);
+        if (ImGui::Combo("Skill Slot 1", &g_settings->skill.slot_1, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(1, g_settings->skill.slot_1);
 
-        if (ImGui::Combo("Skill Slot 2", &slot_2, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(2, slot_2);
+        if (ImGui::Combo("Skill Slot 2", &g_settings->skill.slot_2, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(2, g_settings->skill.slot_2);
 
-        if (ImGui::Combo("Skill Slot 3", &slot_3, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(3, slot_3);
+        if (ImGui::Combo("Skill Slot 3", &g_settings->skill.slot_3, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(3, g_settings->skill.slot_3);
 
-        if (ImGui::Combo("Skill Slot 4", &slot_4, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(4, slot_4);
+        if (ImGui::Combo("Skill Slot 4", &g_settings->skill.slot_4, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(4, g_settings->skill.slot_4);
 
-        if (ImGui::Combo("Skill Slot 5", &slot_5, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(5, slot_5);
+        if (ImGui::Combo("Skill Slot 5", &g_settings->skill.slot_5, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(5, g_settings->skill.slot_5);
 
-        if (ImGui::Combo("Skill Slot 6", &slot_6, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(6, slot_6);
+        if (ImGui::Combo("Skill Slot 6", &g_settings->skill.slot_6, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(6, g_settings->skill.slot_6);
 
-        if (ImGui::Combo("Skill Slot 7", &slot_7, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(7, slot_7);
+        if (ImGui::Combo("Skill Slot 7", &g_settings->skill.slot_7, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(7, g_settings->skill.slot_7);
 
-        if (ImGui::Combo("Skill Slot 8", &slot_8, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(8, slot_8);
+        if (ImGui::Combo("Skill Slot 8", &g_settings->skill.slot_8, skill_list, IM_ARRAYSIZE(skill_list)))
+            player::modify_player_skill(8, g_settings->skill.slot_8);
 
         ImGui::PopItemWidth();
 	}

@@ -25,6 +25,18 @@ namespace big
 			bool infinite_health{ false };
 		};
 
+		struct skill_set
+		{
+			int slot_1;
+			int slot_2;
+			int slot_3;
+			int slot_4;
+			int slot_5;
+			int slot_6;
+			int slot_7;
+			int slot_8;
+		};
+
 		struct window
 		{
 			ImU32 color = 3357612055;
@@ -49,6 +61,7 @@ namespace big
 		}
 
 		self self{};
+		skill_set skill{};
 		window window{};
 
 		void from_json(const nlohmann::json& j)
@@ -66,6 +79,15 @@ namespace big
 
 			this->window.color = j["window"]["color"];
 			this->window.gui_scale = j["window"]["gui_scale"];
+
+			this->skill.slot_1 = j["skill"]["slot_1"];
+			this->skill.slot_2 = j["skill"]["slot_2"];
+			this->skill.slot_3 = j["skill"]["slot_3"];
+			this->skill.slot_4 = j["skill"]["slot_4"];
+			this->skill.slot_5 = j["skill"]["slot_5"];
+			this->skill.slot_6 = j["skill"]["slot_6"];
+			this->skill.slot_7 = j["skill"]["slot_7"];
+			this->skill.slot_8 = j["skill"]["slot_8"];
 		}
 
 		nlohmann::json to_json()
@@ -89,6 +111,18 @@ namespace big
 					"window", {
 						{ "color", this->window.color },
 						{ "gui_scale", this->window.gui_scale }
+					}
+				},
+				{
+					"skill", {
+						{"slot_1", this->skill.slot_1},
+						{"slot_2", this->skill.slot_2},
+						{"slot_3", this->skill.slot_3},
+						{"slot_4", this->skill.slot_4},
+						{"slot_5", this->skill.slot_5},
+						{"slot_6", this->skill.slot_6},
+						{"slot_7", this->skill.slot_7},
+						{"slot_8", this->skill.slot_8},
 					}
 				}
 			};
