@@ -15,7 +15,7 @@ namespace big
 					g_renderer->on_present();
 			}
 
-			return g_hooking->get_original<&swapchain_present>()(this_, sync_interval, flags);
+			return g_hooking->get_original<swapchain_present>()(this_, sync_interval, flags);
 		} EXCEPT_CLAUSE
 
 		return NULL;
@@ -29,7 +29,7 @@ namespace big
 			{
 				g_renderer->pre_reset();
 
-				auto result = g_hooking->get_original<&swapchain_resizebuffers>()
+				auto result = g_hooking->get_original<swapchain_resizebuffers>()
 					(this_, buffer_count, width, height, new_format, swapchain_flags);
 
 				if (SUCCEEDED(result))
@@ -40,7 +40,7 @@ namespace big
 				return result;
 			}
 
-			return g_hooking->get_original<&swapchain_resizebuffers>()
+			return g_hooking->get_original<swapchain_resizebuffers>()
 				(this_, buffer_count, width, height, new_format, swapchain_flags);
 		} EXCEPT_CLAUSE
 
