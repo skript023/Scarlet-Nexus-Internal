@@ -8,9 +8,9 @@ namespace big::unreal_engine
 	{
 		if (auto m_unreal_engine = *g_pointers->m_engine)
 		{
-			if (auto m_instance = m_unreal_engine->m_game)
+			if (auto unreal_engine_game = m_unreal_engine->m_game)
 			{
-				return m_instance->m_manager[0x10];
+				return unreal_engine_game->m_manager[0x80];
 			}
 		}
 

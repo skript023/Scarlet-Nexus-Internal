@@ -35,9 +35,6 @@ namespace big
 		m_swapchain_resizebuffers_hook.enable();
 		m_og_wndproc = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&hooks::wndproc)));
 		m_set_cursor_pos_hook.enable();
-		m_convert_thread_to_fiber_hook.enable();
-		m_process_event_hook.enable();
-
 		m_enabled = true;
 	}
 
@@ -45,8 +42,6 @@ namespace big
 	{
 		m_enabled = false;
 
-		m_process_event_hook.disable();
-		m_convert_thread_to_fiber_hook.disable();
 		m_set_cursor_pos_hook.disable();
 		SetWindowLongPtrW(g_pointers->m_hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(m_og_wndproc));
 		m_swapchain_resizebuffers_hook.disable();

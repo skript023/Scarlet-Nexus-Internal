@@ -119,7 +119,7 @@ namespace big
 	{
 		TRY_CLAUSE
 		{
-			if (unreal_engine::get_character_base())
+			if (unreal_engine::get_character_base() && unreal_engine::get_user_params())
 			{
 				if (g_settings->self.infinite_psychic)
 				{

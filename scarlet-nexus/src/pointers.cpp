@@ -9,11 +9,8 @@ namespace big
 	{
 		memory::pattern_batch main_batch;
 
-		for (int i = 0; i <= 5 && !swapchain_found; i++)
-		{
-			swapchain_found = this->get_swapchain();
-			std::this_thread::sleep_for(1000ms);
-		}
+		if (!this->get_swapchain())
+			LOG(WARNING) << "Failed get swapchain";
 		
 		main_batch.add("Engine", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 ? 74 ? 33 DB", [this](memory::handle ptr)
 		{
@@ -150,13 +147,13 @@ namespace big
 		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
 
 		this->m_swapchain->Release();
-		this->m_swapchain = nullptr;
+		this->m_swapchain = NULL;
 
 		this->m_d3d_device->Release();
-		this->m_d3d_device = nullptr;
+		this->m_d3d_device = NULL;
 
 		this->m_d3d_context->Release();
-		this->m_d3d_context = nullptr;
+		this->m_d3d_context = NULL;
 
 		::DestroyWindow(this->m_window);
 		::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
