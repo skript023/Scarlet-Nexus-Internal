@@ -13,9 +13,7 @@
 
 #include <imgui.h>
 
-#include "menu/player_menu.h"
-#include "menu/player_stats.h"
-#include "menu/setting_menu.h"
+#include "menu/navigation_menu.h"
 
 namespace big
 {
@@ -99,15 +97,9 @@ namespace big
 
 	void gui::dx_on_tick()
 	{
-		if (ImGui::Begin("Scarlet Nexus Trainer"))
-		{
-			ImGui::BeginTabBar("tabbar");
-			player_menu::render_menu();
-			player_stat::render_menu();
-			setting_menu::render_menu();
-			ImGui::EndTabBar();
-		}
-		ImGui::End();
+		navigation::header();
+		navigation::render_menu();
+		navigation::active_view();
 	}
 
 	void gui::script_init()

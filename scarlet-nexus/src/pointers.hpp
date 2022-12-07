@@ -2,6 +2,7 @@
 #include "common.hpp"
 #include "function_types.hpp"
 #include "class/engine_sdk.hpp"
+#include <class/vector.hpp>
 
 namespace big
 {
@@ -18,6 +19,7 @@ namespace big
 		EngineBase** m_engine{};
 		FUObjectArray* m_object_array{};
 		FNamePool* m_name{};
+		iVector2* m_resolution{};
 		functions::process_event_t m_process_event{};
 		PVOID m_battle_points_handle;
 		PVOID m_credits_handle;

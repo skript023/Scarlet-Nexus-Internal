@@ -8,14 +8,9 @@ namespace big
 {
     void setting_menu::render_menu()
     {
-        if (ImGui::BeginTabItem("Setting"))
+        if (ImGui::Button("Quit"))
         {
-            if (ImGui::Button("Quit"))
-            {
-                g_running = false;
-            }
-
-            ImGui::EndTabItem();
+            g_running = false;
         }
     }
 }

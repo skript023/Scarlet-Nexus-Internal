@@ -47,11 +47,16 @@ namespace big
 			m_items_handle = ptr.as<decltype(m_items_handle)>();
 		});
 		
+		main_batch.add("Screen Resolution", "0F 5B D0 0F 5B C9 0F 14 D1 F2 41 0F 11 10 C3", [this](memory::handle ptr)
+		{
+			m_resolution = ptr.sub(12).rip().as<decltype(m_resolution)>(); // add(14).rip() 0F 95 C1 48 03 C8 48 89 4A 20 66 0F 6E 05 ? ? ? ? 66 0F 6E 0D ? ? ? ? 0F 5B D0 0F 5B C9 0F 14 D1 F2 41 0F 11 10 C3
+		});
+		
 		main_batch.add("Return Address", "FF 23", [this](memory::handle ptr)
 		{
 			m_return_address = ptr.as<decltype(m_return_address)>();
 		});
-		
+
 		main_batch.run(memory::module(nullptr));
 
 		this->m_hwnd = FindWindowW(L"UnrealWindow", L"ScarletNexus  ");

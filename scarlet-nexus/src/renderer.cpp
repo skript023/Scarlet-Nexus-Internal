@@ -122,6 +122,11 @@ namespace big
 		std::strcpy(font_cfg.Name, "Rubik");
 
 		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.f, &font_cfg);
+
+		m_subtitle = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 18.f, &font_cfg);
+
+		m_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 24.f, &font_cfg);
+
 		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
 
 		g_gui.dx_init();

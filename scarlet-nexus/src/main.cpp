@@ -8,6 +8,7 @@
 #include "script_mgr.hpp"
 #include "settings.hpp"
 #include "benchmark.hpp"
+#include "services/gui/gui_service.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -48,6 +49,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto thread_pool_instance = std::make_unique<thread_pool>();
 		LOG(HACKER) << "Thread Pool initialized.";
 
+		auto gui_service_instance = std::make_unique<gui_service>();
+		LOG(HACKER) << "Service registered.";
+
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		LOG(HACKER) << "Scripts registered.";
 
@@ -70,6 +74,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		g_script_mgr.remove_all_scripts();
 		LOG(HACKER) << "Scripts unregistered.";
+
+		gui_service_instance.reset();
+		LOG(HACKER) << "Service unregistered.";
 
 		hooking_instance.reset();
 		LOG(HACKER) << "Hooking uninitialized.";

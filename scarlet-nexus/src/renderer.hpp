@@ -25,6 +25,8 @@ namespace big
 		ImFont* m_monospace_font;
 
 		HWND m_window = NULL;
+		ImFont* m_title = nullptr;
+		ImFont* m_subtitle = nullptr;
 	private:
 		ID3D11Device* m_d3d_device = nullptr;
 		ID3D11DeviceContext* m_d3d_context = nullptr;
