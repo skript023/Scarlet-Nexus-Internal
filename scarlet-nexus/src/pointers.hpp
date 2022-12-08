@@ -21,10 +21,10 @@ namespace big
 		FNamePool* m_name{};
 		iVector2* m_resolution{};
 		functions::process_event_t m_process_event{};
-		PVOID m_battle_points_handle;
-		PVOID m_credits_handle;
-		PVOID m_items_handle;
-		PVOID m_return_address;
+		void* m_battle_points_handle;
+		void* m_credits_handle;
+		void* m_items_handle;
+		void* m_return_address;
 	private:
 		functions::create_d3d11_device_and_swapchain_t create_device_and_swapchain{};
 		bool get_swapchain();

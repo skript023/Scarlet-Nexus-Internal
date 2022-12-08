@@ -73,11 +73,13 @@ namespace big
 
 			while (ptr.as<std::uint8_t&>() == 0xE9)
 			{
-				ptr = ptr.add(1).rip();
-
 				if (m_target == g_pointers->m_swapchain_methods[8])
 				{
 					throw std::runtime_error("Swapchain on present function has already been hooked by another program.");
+				}
+				else
+				{
+					ptr = ptr.add(1).rip();
 				}
 			}
 

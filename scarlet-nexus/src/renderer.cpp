@@ -1,9 +1,10 @@
-#include "common.hpp"
-#include "fonts/font_list.hpp"
-#include "logger.hpp"
 #include "gui.hpp"
+#include "logger.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
+#include "fonts/font_list.hpp"
+#include "fonts/icon_list.hpp"
+
 #include <imgui.h>
 #include <backends/imgui_impl_dx11.h>
 #include <backends/imgui_impl_win32.h>
@@ -48,9 +49,11 @@ namespace big
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
+		g_gui.dx_on_tick();
+
 		if (g_gui.m_opened)
 		{
-			g_gui.dx_on_tick();
+			g_gui.dx_on_opened();
 		}
 
 		ImGui::Render();
@@ -90,6 +93,7 @@ namespace big
 
 		this->m_init = true;
 		LOG(HACKER) << "Swapchain initialized.";
+		g_gui.script_init();
 
 		return true;
 	}
@@ -122,10 +126,13 @@ namespace big
 		std::strcpy(font_cfg.Name, "Rubik");
 
 		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.f, &font_cfg);
+		merge_icon_with_latest_font(14.f, false);
 
 		g_settings->window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 18.f, &font_cfg);
+		merge_icon_with_latest_font(16.f, false);
 
 		g_settings->window.font_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 24.f, &font_cfg);
+		merge_icon_with_latest_font(17.f, false);
 
 		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
 
@@ -176,11 +183,27 @@ namespace big
 
 			g_gui.m_opened ^= true;
 		}
+		if (msg == WM_QUIT)
+		{
+			g_running = false;
+		}
 			
 
 		if (g_gui.m_opened)
 		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
 		}
+	}
+
+	void renderer::merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas)
+	{
+		static const ImWchar icons_ranges[3] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+
+		ImFontConfig icons_config;
+		icons_config.MergeMode = true;
+		icons_config.PixelSnapH = true;
+		icons_config.FontDataOwnedByAtlas = FontDataOwnedByAtlas;
+
+		g_settings->window.font_icon = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_icons, sizeof(font_icons), font_size, &icons_config, icons_ranges);
 	}
 }

@@ -34,17 +34,17 @@ namespace big
 
 		main_batch.add("Battle Points Hanlder", "48 89 ? ? ? 57 48 83 EC ? 8B FA 48 8B ? E8 ? ? ? ? 3C ? 75 ? 8B 93", [this](memory::handle ptr)
 		{
-			m_battle_points_handle = ptr.as<decltype(m_battle_points_handle)>();
+			m_battle_points_handle = ptr.as<void*>();
 		});
 
 		main_batch.add("Credits Handler", "48 89 ? ? ? 48 89 ? ? ? 48 89 ? ? ? 57 48 83 EC ? 4C 8B ? ? ? ? ? 33 F6", [this](memory::handle ptr)
 		{
-			m_credits_handle = ptr.as<decltype(m_credits_handle)>();
+			m_credits_handle = ptr.as<void*>();
 		});
 
 		main_batch.add("Items Handler", "45 8D ? ? 45 89 ? ? 45 3B", [this](memory::handle ptr)
 		{
-			m_items_handle = ptr.as<decltype(m_items_handle)>();
+			m_items_handle = ptr.as<void*>();
 		});
 		
 		main_batch.add("Screen Resolution", "0F 5B D0 0F 5B C9 0F 14 D1 F2 41 0F 11 10 C3", [this](memory::handle ptr)
@@ -54,7 +54,7 @@ namespace big
 		
 		main_batch.add("Return Address", "FF 23", [this](memory::handle ptr)
 		{
-			m_return_address = ptr.as<decltype(m_return_address)>();
+			m_return_address = ptr.as<void*>();
 		});
 
 		main_batch.run(memory::module(nullptr));
@@ -96,16 +96,16 @@ namespace big
 			return false;
 		}
 
-		HMODULE libD3D11 = ::GetModuleHandle(L"d3d11.dll");
-		if (libD3D11 == NULL)
+		HMODULE d3d11 = ::GetModuleHandle(L"d3d11.dll");
+		if (d3d11 == NULL)
 		{
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
 		}
 
-		void* D3D11CreateDeviceAndSwapChain = ::GetProcAddress(libD3D11, "D3D11CreateDeviceAndSwapChain");
-		if (D3D11CreateDeviceAndSwapChain == NULL)
+		void* create_device_and_swapchain = ::GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain");
+		if (create_device_and_swapchain == NULL)
 		{
 			::DestroyWindow(this->m_window);
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
@@ -141,7 +141,7 @@ namespace big
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-		HRESULT hr = ((functions::create_d3d11_device_and_swapchain_t)(D3D11CreateDeviceAndSwapChain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
+		HRESULT hr = ((functions::create_d3d11_device_and_swapchain_t)(create_device_and_swapchain))(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, featureLevels, 2, D3D11_SDK_VERSION, &swapChainDesc, &this->m_swapchain, &this->m_d3d_device, &featureLevel, &this->m_d3d_context);
 		
 		if (FAILED(hr))
 		{
@@ -149,9 +149,6 @@ namespace big
 			::UnregisterClass(windowClass.lpszClassName, windowClass.hInstance);
 			return false;
 		}
-
-		if (!this->m_swapchain || !this->m_d3d_device || !this->m_d3d_context)
-			return false;
 
 		::memcpy(this->m_swapchain_methods, *(void***)this->m_swapchain, sizeof(m_swapchain_methods));
 

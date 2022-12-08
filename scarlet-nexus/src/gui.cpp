@@ -1,19 +1,21 @@
 #include "common.hpp"
-#include "fiber_pool.hpp"
 #include "gui.hpp"
 #include "logger.hpp"
-#include "memory/module.hpp"
-#include "memory/pattern.hpp"
+#include "script.hpp"
+#include "settings.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
-#include "script.hpp"
+#include "fiber_pool.hpp"
 
+#include "memory/module.hpp"
+#include "memory/pattern.hpp"
 #include "utility/player.hpp"
-#include "settings.hpp"
 
 #include <imgui.h>
 
+#include "menu/notification.h"
 #include "menu/navigation_menu.h"
+#include "services/notification/notification_service.hpp"
 
 namespace big
 {
@@ -79,6 +81,11 @@ namespace big
 
 	void gui::dx_on_tick()
 	{
+		draw::notifications();
+	}
+
+	void gui::dx_on_opened()
+	{
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImGui::ColorConvertU32ToFloat4(g_settings->window.color));
 		navigation::header();
 		navigation::render_menu();
@@ -89,6 +96,7 @@ namespace big
 	void gui::script_init()
 	{
 		g_gui.m_opened = true;
+		g_notification_service->success("Welcome", "Scarlet Nexus Trainer Successfully Injected. Press insert to open");
 	}
 
 	void gui::script_on_tick()
@@ -98,7 +106,6 @@ namespace big
 
 	void gui::script_func()
 	{
-		g_gui.script_init();
 		while (true)
 		{
 			g_gui.script_on_tick();

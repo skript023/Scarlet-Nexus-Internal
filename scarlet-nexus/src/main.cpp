@@ -9,7 +9,9 @@
 #include "settings.hpp"
 #include "benchmark.hpp"
 #include "event_loop/backend_events.hpp"
+
 #include "services/gui/gui_service.hpp"
+#include "services/notification/notification_service.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
 {
@@ -51,6 +53,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(HACKER) << "Thread Pool initialized.";
 
 		auto gui_service_instance = std::make_unique<gui_service>();
+		auto notification_instance = std::make_unique<notification_service>();
 		LOG(HACKER) << "Service registered.";
 
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
@@ -77,6 +80,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_script_mgr.remove_all_scripts();
 		LOG(HACKER) << "Scripts unregistered.";
 
+		notification_instance.reset();
 		gui_service_instance.reset();
 		LOG(HACKER) << "Service unregistered.";
 
@@ -127,7 +131,7 @@ BOOL APIENTRY DllMain(HMODULE hmod, DWORD reason, PVOID)
 		DisableThreadLibraryCalls(hmod);
 
 		g_hmodule = hmod;
-		g_main_thread = CreateThread(nullptr, 0, main_thread, nullptr, 0, &g_main_thread_id);
+		g_main_thread = CreateThread(nullptr, 0, &main_thread, nullptr, 0, &g_main_thread_id);
 		break;
 	case DLL_PROCESS_DETACH:
 		g_running = false;
