@@ -20,7 +20,7 @@ DWORD APIENTRY main_thread(LPVOID)
 	while (!FindWindow(L"UnrealWindow", L"ScarletNexus  "))
 		std::this_thread::sleep_for(1s);
 
-	benchmark initialization_benchmark("Initialization");
+	auto initialization_benchmark = std::make_unique<benchmark>("Initialization");
 
 	auto logger_instance = std::make_unique<logger>("Scarlet Nexus");
 	try
@@ -64,7 +64,8 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_hooking->enable();
 		LOG(HACKER) << "Hooking enabled.";
 
-		initialization_benchmark.get_runtime();
+		initialization_benchmark->get_runtime();
+		initialization_benchmark->reset();
 		initialization_benchmark.reset();
 
 		while (g_running)

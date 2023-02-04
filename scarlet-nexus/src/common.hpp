@@ -47,6 +47,7 @@
 
 #include <regex>
 #include <tlhelp32.h>
+#include <cpr/cpr.h>
 
 #include <nlohmann/json.hpp>
 
@@ -60,6 +61,7 @@
 #define DISTANCE_SPAWN 10
 
 #define CUSTOM_HUD "Madang Hese Udud Hese Teu Boga Duit Wuhan Kontol"
+#define NODISCARD [[nodiscard]]
 
 namespace big
 {
@@ -67,6 +69,7 @@ namespace big
 	
 	template <typename T>
 	using comptr = Microsoft::WRL::ComPtr<T>;
+	inline const std::string g_base_url = "https://gottvergessen.webhostapp.com/api/v1";
 
 	inline HMODULE g_hmodule{};
 	inline HANDLE g_main_thread{};
