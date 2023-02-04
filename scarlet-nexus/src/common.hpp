@@ -53,6 +53,7 @@
 
 #include "settings.hpp"
 #include "logger.hpp"
+#include "subprocess.hpp"
 
 #define MOD_NAME "Ellohim Private Menu"
 

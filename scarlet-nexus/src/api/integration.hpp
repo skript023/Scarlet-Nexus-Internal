@@ -15,8 +15,9 @@ namespace big
 		integration(integration&& that) = delete;
 		integration& operator=(integration&& that) = delete;
 
-		bool begin_integration();
+		bool generate_injection_code();
 		bool request_globals(nlohmann::ordered_json& global_json);
+		bool request_locals(nlohmann::ordered_json& local_json);
 		virtual void heartbeat();
 		static void real_time_integration();
 		static void real_time_request();
@@ -25,14 +26,14 @@ namespace big
 		static cpr::Response get(std::string route, Args&& ...args)
 		{
 			cpr::Url url = std::format("{}/{}", g_base_url, route);
-			return cpr::Get(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()}});
+			return cpr::Get(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()} });
 		}
 
 		template<class ...Args>
 		static cpr::Response post(std::string route, Args&& ...args)
 		{
 			cpr::Url url = std::format("{}/{}", g_base_url, route);
-			return cpr::Post(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()}});
+			return cpr::Post(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()} });
 		}
 
 		user* users() { return m_user.get(); }
@@ -40,5 +41,5 @@ namespace big
 		std::unique_ptr<user> m_user;
 	};
 
-	inline integration* g_web_server{};
+	inline std::unique_ptr<integration> g_web_server{};
 }

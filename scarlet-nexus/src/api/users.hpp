@@ -1,16 +1,19 @@
 #pragma once
+#include "hardware.hpp"
 
 namespace big
 {
-	class user
+	class user : public hardware
 	{
 	public:
 		explicit user()
 		{
-			this->start_integration();
+			g_thread_pool->push([this] {
+				this->start_integration();
+				});
 		}
 
-		~user() noexcept = default;
+		virtual ~user() noexcept = default;
 
 		user(const user& that) = delete;
 		user& operator=(const user& that) = delete;
@@ -21,7 +24,7 @@ namespace big
 		bool start_integration()
 		{
 			nlohmann::json json = {
-				{ "hardware", m_hardware_uuid },
+				{ "hardware", this->get_bios()},
 			};
 
 			try
@@ -61,9 +64,6 @@ namespace big
 		NODISCARD std::string fullname() const { return m_fullname; };
 		NODISCARD std::string username() const { return m_username; };
 		NODISCARD std::string role() const { return m_role; };
-	private:
-		std::string m_hardware_uuid;
-		std::string m_computer_name;
 	private:
 		std::string m_token;
 		std::string m_fullname;
