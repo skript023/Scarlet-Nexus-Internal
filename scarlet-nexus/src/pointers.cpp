@@ -2,6 +2,7 @@
 #include "logger.hpp"
 #include "pointers.hpp"
 #include "memory/all.hpp"
+#include "api/integration.hpp"
 
 namespace big
 {
@@ -10,7 +11,7 @@ namespace big
 		memory::pattern_batch main_batch;
 
 		if (!this->get_swapchain())
-			LOG(WARNING) << "Failed get swapchain";
+			LOG(WARNING) << "Failed to find game's swapchain address";
 		
 		main_batch.add("Engine", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 ? 74 ? 33 DB", [this](memory::handle ptr)
 		{

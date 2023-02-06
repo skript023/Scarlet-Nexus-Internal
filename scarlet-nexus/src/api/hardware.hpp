@@ -44,7 +44,7 @@ namespace big
 		}
 
 		uint32_t get_thread_count() const { return m_logical_processor; }
-		std::string get_bios() const { return m_computer_uuid; }
+		std::string get_unique_id() const { return m_computer_uuid; }
 		std::string get_computer_name() const { return m_computer_name; }
 	private:
 		std::string m_computer_uuid;

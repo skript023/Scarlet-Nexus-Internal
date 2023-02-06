@@ -10,6 +10,8 @@
 #include "benchmark.hpp"
 #include "event_loop/backend_events.hpp"
 
+#include "api/integration.hpp"
+
 #include "services/gui/gui_service.hpp"
 #include "services/notification/notification_service.hpp"
 
@@ -36,6 +38,12 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto settings_instance = std::make_unique<settings>();
 		g_settings->load();
 		LOG(HACKER) << "Settings initialized.";
+
+		auto thread_pool_instance = std::make_unique<thread_pool>();
+		LOG(HACKER) << "Thread Pool initialized.";
+
+		auto integration_instance = std::make_unique<integration>();
+		LOG(HACKER) << "Connected to server.";
 		
 		auto pointers_instance = std::make_unique<pointers>();
 		LOG(HACKER) << "Pointers initialized.";
@@ -49,9 +57,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(HACKER) << "Hooking initialized.";
 
-		auto thread_pool_instance = std::make_unique<thread_pool>();
-		LOG(HACKER) << "Thread Pool initialized.";
-
 		auto gui_service_instance = std::make_unique<gui_service>();
 		auto notification_instance = std::make_unique<notification_service>();
 		LOG(HACKER) << "Service registered.";
@@ -59,6 +64,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_skill_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
+		g_thread_pool->push(integration::real_time_request);
 		LOG(HACKER) << "Scripts registered.";
 
 		g_hooking->enable();

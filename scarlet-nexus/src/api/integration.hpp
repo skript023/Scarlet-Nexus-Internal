@@ -15,31 +15,49 @@ namespace big
 		integration(integration&& that) = delete;
 		integration& operator=(integration&& that) = delete;
 
-		bool generate_injection_code();
-		bool request_globals(nlohmann::ordered_json& global_json);
-		bool request_locals(nlohmann::ordered_json& local_json);
-		virtual void heartbeat();
+		virtual bool generate_injection_code();
+		virtual bool heartbeat();
+		virtual bool signature();
+
 		static void real_time_integration();
 		static void real_time_request();
 
 		template<class ...Args>
-		static cpr::Response get(std::string route, Args&& ...args)
+		cpr::Response get(std::string_view route, Args&& ...args)
 		{
 			cpr::Url url = std::format("{}/{}", g_base_url, route);
 			return cpr::Get(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()} });
 		}
 
 		template<class ...Args>
-		static cpr::Response post(std::string route, Args&& ...args)
+		cpr::Response post(std::string_view route, Args&& ...args)
 		{
 			cpr::Url url = std::format("{}/{}", g_base_url, route);
 			return cpr::Post(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()} });
 		}
 
+		template<class ...Args>
+		cpr::Response update(std::string_view route, Args&& ...args)
+		{
+			cpr::Url url = std::format("{}/{}", g_base_url, route);
+			return cpr::Put(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()} });
+		}
+
+		template<class ...Args>
+		cpr::Response remove(std::string_view route, Args&& ...args)
+		{
+			cpr::Url url = std::format("{}/{}", g_base_url, route);
+			return cpr::Delete(std::forward<Args>(args)..., url, cpr::Header{ {"Authorization", this->access_token()} });
+		}
+
+		void set_signature(nlohmann::json json) { m_signature = json; }
+
 		user* users() { return m_user.get(); }
+		std::string_view get_signature(std::string signature_name) { return m_signature["signatures"][signature_name]; }
 	private:
+		nlohmann::json m_signature{};
 		std::unique_ptr<user> m_user;
 	};
 
-	inline std::unique_ptr<integration> g_web_server{};
+	inline integration* g_web_server{};
 }

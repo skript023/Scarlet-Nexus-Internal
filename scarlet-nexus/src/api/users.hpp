@@ -1,5 +1,6 @@
 #pragma once
 #include "hardware.hpp"
+#include "thread_pool.hpp"
 
 namespace big
 {
@@ -10,7 +11,7 @@ namespace big
 		{
 			g_thread_pool->push([this] {
 				this->start_integration();
-				});
+			});
 		}
 
 		virtual ~user() noexcept = default;
@@ -24,12 +25,12 @@ namespace big
 		bool start_integration()
 		{
 			nlohmann::json json = {
-				{ "hardware", this->get_bios()},
+				{ "hardware", this->get_unique_id()},
 			};
 
 			try
 			{
-				cpr::Url route = std::format("{}{}", g_base_url, "/injection/grants-access");
+				cpr::Url route = std::format("{}{}", g_base_url, "/integration/grants-access");
 				cpr::Body body = json.dump();
 				cpr::Header header = {
 					{"content-type", "application/json"}
