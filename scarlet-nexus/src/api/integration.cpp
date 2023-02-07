@@ -6,7 +6,8 @@ namespace big
 	integration::integration() : m_user(std::make_unique<user>())
 	{
 		g_thread_pool->push([this] {
-			this->signature();
+			if (!this->signature())
+				throw std::runtime_error("failed request data to server");
 		});
 		g_web_server = this;
 	}
