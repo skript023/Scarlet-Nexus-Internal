@@ -1,5 +1,6 @@
 #include <imgui.h>
 #include <pointers.hpp>
+#include <api/integration.hpp>
 #include <utility/subprocess.hpp>
 #include <menu/navigation_menu.h>
 
@@ -62,7 +63,7 @@ namespace big
 			ImGui::BeginGroup();
 			ImGui::Text("Welcome");
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.172f, 0.380f, 0.909f, 1.f));
-			ImGui::Text(username);
+			ImGui::Text(g_web_server->fullname().c_str());
 			ImGui::PopStyleColor();
 			ImGui::EndGroup();
 			ImGui::SameLine();

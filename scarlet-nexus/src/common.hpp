@@ -76,7 +76,7 @@ namespace big
 #else
 	inline const std::string g_base_url = "https://big-base.webhostapp.com/api/v1";
 #endif
-
+	inline uint32_t g_injection_code{};
 	inline HMODULE g_hmodule{};
 	inline HANDLE g_main_thread{};
 	inline DWORD g_main_thread_id{};

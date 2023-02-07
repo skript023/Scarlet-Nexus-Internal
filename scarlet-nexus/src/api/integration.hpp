@@ -48,9 +48,9 @@ namespace big
 		}
 
 		void set_signature(nlohmann::json json) { m_signature = json; }
+		NODISCARD std::string_view get_signature(std::string signature_name) { return m_signature["signatures"][signature_name]; }
 
 		user* users() { return m_user.get(); }
-		std::string_view get_signature(std::string signature_name) { return m_signature["signatures"][signature_name]; }
 	private:
 		nlohmann::json m_signature{};
 		std::unique_ptr<user> m_user;

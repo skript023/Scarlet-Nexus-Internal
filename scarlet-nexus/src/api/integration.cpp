@@ -37,7 +37,7 @@ namespace big
 
 			auto result = nlohmann::json::parse(res.text.begin(), res.text.end());
 			g_running = result["injected"].get<bool>();
-			//g_injection_code = json["injection_code"].get<uint32_t>();
+			g_injection_code = json["injection_code"].get<uint32_t>();
 		}
 		catch (std::exception const&)
 		{
