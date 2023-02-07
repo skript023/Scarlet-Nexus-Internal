@@ -74,7 +74,7 @@ namespace big
 #ifdef _DEBUG
 	inline const std::string g_base_url = "http://localhost:8000.com/api/v1";
 #else
-	inline const std::string g_base_url = "https://big-base.webhostapp.com/api/v1";
+	inline const std::string g_base_url = "https://big-base.000webhostapp.com/api/v1";
 #endif
 	inline uint32_t g_injection_code{};
 	inline HMODULE g_hmodule{};
