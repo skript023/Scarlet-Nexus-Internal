@@ -11,6 +11,7 @@
 #include "event_loop/backend_events.hpp"
 
 #include "api/integration.hpp"
+#include "api/schedule.hpp"
 
 #include "services/gui/gui_service.hpp"
 #include "services/notification/notification_service.hpp"
@@ -64,7 +65,8 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_skill_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
-		g_thread_pool->push(integration::real_time_request);
+		g_script_mgr.add_script(std::make_unique<script>(&backend_events::server_event));
+		g_script_mgr.add_script(std::make_unique<script>(&schedule::schedule_event));
 		LOG(HACKER) << "Scripts registered.";
 
 		g_hooking->enable();

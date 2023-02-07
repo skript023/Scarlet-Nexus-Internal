@@ -19,9 +19,6 @@ namespace big
 		virtual bool heartbeat();
 		virtual bool signature();
 
-		static void real_time_integration();
-		static void real_time_request();
-
 		template<class ...Args>
 		cpr::Response get(std::string_view route, Args&& ...args)
 		{

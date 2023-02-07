@@ -85,24 +85,4 @@ namespace big
 
 		return true;
 	}
-	void integration::real_time_integration()
-	{
-		g_web_server->heartbeat();
-	}
-	void integration::real_time_request()
-	{
-		TRY_CLAUSE
-		{
-			while (g_running)
-			{
-				static auto start = std::chrono::high_resolution_clock::now();
-
-				if ((start - std::chrono::high_resolution_clock::now()).count() < std::chrono::minutes(1).count())
-				{
-					real_time_integration();
-				}
-			}
-		}
-		EXCEPT_CLAUSE
-	}
 }
