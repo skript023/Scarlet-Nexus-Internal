@@ -18,18 +18,30 @@ namespace big
 	{
 		if (!m_wake_time.has_value() || m_wake_time.value() <= std::chrono::high_resolution_clock::now())
 		{
-			g_thread_pool->push(m_jobs.top());
+			std::unique_lock lock(m_mutex);
+			if (!m_jobs.empty())
+			{
+				std::function<void()> job = std::move(m_jobs.top());
+				m_jobs.pop();
+				lock.unlock();
+
+				g_thread_pool->push(job);
+			}
 		}
 	}
 
 	schedule* schedule::task(std::function<void()> job)
 	{
-		m_jobs.push(std::move(job));
+		if (job)
+		{
+			std::lock_guard lock(m_mutex);
+			m_jobs.push(std::move(job));
+		}
 
 		return this;
 	}
 
-	void schedule::duration(std::optional<std::chrono::high_resolution_clock::duration> time)
+	void schedule::every(std::optional<std::chrono::high_resolution_clock::duration> time)
 	{
 		if (time.has_value())
 		{

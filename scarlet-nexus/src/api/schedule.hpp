@@ -15,11 +15,12 @@ namespace big
 
 		void tick();
 		schedule* task(std::function<void()> job);
-		void duration(std::optional<std::chrono::high_resolution_clock::duration> time);
+		void every(std::optional<std::chrono::high_resolution_clock::duration> time);
 		static void schedule_event();
 	private:
 		std::stack<std::function<void()>> m_jobs;
 		std::optional<std::chrono::high_resolution_clock::time_point> m_wake_time;
+		std::recursive_mutex m_mutex;
 	};
 
 	inline schedule* g_schedule;

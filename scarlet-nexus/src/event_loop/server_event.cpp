@@ -7,7 +7,7 @@ namespace big
 {
 	void backend_events::server_task()
 	{
-		g_schedule->task([] { g_web_server->heartbeat(); })->duration(1min);
+		g_schedule->task([] { g_web_server->heartbeat(); })->every(1min);
 	}
 
 	void backend_events::server_event()
