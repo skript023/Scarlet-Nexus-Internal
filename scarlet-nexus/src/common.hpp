@@ -55,13 +55,6 @@
 #include "logger.hpp"
 #include "subprocess.hpp"
 
-#define MOD_NAME "Ellohim Private Menu"
-
-#define PRODUCT_NAME "Ellohim"
-
-#define DISTANCE_SPAWN 10
-
-#define CUSTOM_HUD "Madang Hese Udud Hese Teu Boga Duit Wuhan Kontol"
 #define NODISCARD [[nodiscard]]
 
 namespace big
