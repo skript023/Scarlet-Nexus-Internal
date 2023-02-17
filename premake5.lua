@@ -1,4 +1,4 @@
-workspace "scarlet-nexus"
+workspace "Integration Unit Test"
   architecture "x64"
   startproject "scarlet-nexus"
 
@@ -15,7 +15,7 @@ workspace "scarlet-nexus"
   IncludeDir["ImGui"] = "vendor/ImGui"
   IncludeDir["ImGuiImpl"] = "vendor/ImGui/examples"
   IncludeDir["g3log"] = "vendor/g3log/src"
-  
+
   CppVersion = "C++20"
   MsvcToolset = "v143"
   WindowsSdkVersion = "10.0"

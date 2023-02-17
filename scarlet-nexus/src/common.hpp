@@ -55,6 +55,10 @@
 #include "logger.hpp"
 #include "subprocess.hpp"
 
+#pragma comment(lib, "Ws2_32.Lib")
+#pragma comment(lib, "Wldap32.Lib")
+#pragma comment(lib, "Crypt32.Lib")
+
 #define NODISCARD [[nodiscard]]
 
 namespace big
