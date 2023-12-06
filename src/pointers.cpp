@@ -2,7 +2,6 @@
 #include "logger.hpp"
 #include "pointers.hpp"
 #include "memory/all.hpp"
-#include "api/integration.hpp"
 
 namespace big
 {
@@ -11,7 +10,7 @@ namespace big
 		memory::pattern_batch main_batch;
 
 		if (!this->get_swapchain())
-			LOG(WARNING) << "Failed to find game's swapchain address";
+			LOG(WARNING) << "Failed get swapchain";
 		
 		main_batch.add("Engine", "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 85 ? 74 ? 33 DB", [this](memory::handle ptr)
 		{
@@ -60,7 +59,7 @@ namespace big
 
 		main_batch.run(memory::module(nullptr));
 
-		this->m_hwnd = FindWindowW(L"UnrealWindow", L"ScarletNexus  ");
+		this->m_hwnd = FindWindow("UnrealWindow", "ScarletNexus  ");
 		if (!this->m_hwnd)
 			throw std::runtime_error("Failed to find the game's window.");
 
@@ -85,19 +84,19 @@ namespace big
 		windowClass.hCursor = NULL;
 		windowClass.hbrBackground = NULL;
 		windowClass.lpszMenuName = NULL;
-		windowClass.lpszClassName = L"Kiero";
+		windowClass.lpszClassName = "Kiero";
 		windowClass.hIconSm = NULL;
 
 		::RegisterClassEx(&windowClass);
 
-		this->m_window = ::CreateWindow(windowClass.lpszClassName, L"Kiero DirectX Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, NULL, NULL, windowClass.hInstance, NULL);
+		this->m_window = ::CreateWindow(windowClass.lpszClassName, "Kiero DirectX Window", WS_OVERLAPPEDWINDOW, 0, 0, 100, 100, NULL, NULL, windowClass.hInstance, NULL);
 
 		if (this->m_window == NULL)
 		{
 			return false;
 		}
 
-		HMODULE d3d11 = ::GetModuleHandle(L"d3d11.dll");
+		HMODULE d3d11 = ::GetModuleHandle("d3d11.dll");
 		if (d3d11 == NULL)
 		{
 			::DestroyWindow(this->m_window);

@@ -3,7 +3,7 @@
 #include "detour_hook.hpp"
 #include "logger.hpp"
 #include "memory/handle.hpp"
-#include <..\MinHook\include\MinHook.h>
+#include <MinHook.h>
 
 namespace big
 {
@@ -73,14 +73,7 @@ namespace big
 
 			while (ptr.as<std::uint8_t&>() == 0xE9)
 			{
-				if (m_target == g_pointers->m_swapchain_methods[8])
-				{
-					throw std::runtime_error("Swapchain on present function has already been hooked by another program.");
-				}
-				else
-				{
-					ptr = ptr.add(1).rip();
-				}
+				ptr = ptr.add(1).rip();
 			}
 
 			m_target = ptr.as<void*>();

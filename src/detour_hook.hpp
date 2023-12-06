@@ -17,10 +17,7 @@ namespace big
 		void disable();
 
 		template <typename T>
-		inline T get_original()
-		{
-			return static_cast<T>(m_original);
-		}
+		T get_original();
 
 		void fix_hook_address();
 	private:
@@ -29,4 +26,10 @@ namespace big
 		void* m_detour;
 		void* m_original{};
 	};
+
+	template <typename T>
+	inline T detour_hook::get_original()
+	{
+		return static_cast<T>(m_original);
+	}
 }

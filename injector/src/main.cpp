@@ -14,7 +14,7 @@ int main()
 	process::pid = process::get_process_id_by_name();
 	std::cout << process::name << " found... | " << process::pid;
 
-	if (process::create_remote_thread("scarlet-nexus.dll"))
+	if (process::create_remote_thread("ScarletNexus.dll"))
 		std::cout << ("DLL Injection done.\n") << std::endl;
 	else
 		std::cout << ("Could not inject the DLL.") << std::endl;

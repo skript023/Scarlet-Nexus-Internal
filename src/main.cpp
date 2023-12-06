@@ -10,9 +10,6 @@
 #include "benchmark.hpp"
 #include "event_loop/backend_events.hpp"
 
-#include "api/integration.hpp"
-#include "api/schedule.hpp"
-
 #include "services/gui/gui_service.hpp"
 #include "services/notification/notification_service.hpp"
 
@@ -20,10 +17,10 @@ DWORD APIENTRY main_thread(LPVOID)
 {
 	using namespace big;
 
-	while (!FindWindow(L"UnrealWindow", L"ScarletNexus  "))
+	while (!FindWindow("UnrealWindow", "ScarletNexus  "))
 		std::this_thread::sleep_for(1s);
 
-	auto initialization_benchmark = std::make_unique<benchmark>("Initialization");
+	benchmark initialization_benchmark("Initialization");
 
 	auto logger_instance = std::make_unique<logger>("Scarlet Nexus");
 	try
@@ -39,12 +36,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto settings_instance = std::make_unique<settings>();
 		g_settings->load();
 		LOG(HACKER) << "Settings initialized.";
-
-		auto thread_pool_instance = std::make_unique<thread_pool>();
-		LOG(HACKER) << "Thread Pool initialized.";
-
-		auto integration_instance = std::make_unique<integration>();
-		LOG(HACKER) << "Connected to server.";
 		
 		auto pointers_instance = std::make_unique<pointers>();
 		LOG(HACKER) << "Pointers initialized.";
@@ -54,6 +45,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		auto fiber_pool_instance = std::make_unique<fiber_pool>(10);
 		LOG(HACKER) << "Fiber pool initialized.";
+
+		auto thread_pool_instance = std::make_unique<thread_pool>();
+		LOG(HACKER) << "Thread Pool initialized.";
 
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(HACKER) << "Hooking initialized.";
@@ -65,15 +59,12 @@ DWORD APIENTRY main_thread(LPVOID)
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_skill_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
-		g_script_mgr.add_script(std::make_unique<script>(&backend_events::server_event));
-		g_script_mgr.add_script(std::make_unique<script>(&schedule::schedule_event));
 		LOG(HACKER) << "Scripts registered.";
 
 		g_hooking->enable();
 		LOG(HACKER) << "Hooking enabled.";
 
-		initialization_benchmark->get_runtime();
-		initialization_benchmark->reset();
+		initialization_benchmark.get_runtime();
 		initialization_benchmark.reset();
 
 		while (g_running)

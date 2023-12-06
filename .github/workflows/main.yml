@@ -13,35 +13,33 @@ jobs:
     runs-on: windows-2022
   
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
+      - uses: actions/checkout@v3
 
-    - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.1
-    
-    - name: Setup premake
-      uses: abel0b/setup-premake@v2
-      with:
-        version: "5.0.0-beta1"
-      
-    - name: Generate project files using Premake  
-      run: |
-        ls .premake
-        premake5 vs2022
-        
-    - name: Build scarlet-nexus
-      shell: cmd
-      run: 'msbuild scarlet-nexus/scarlet-nexus.vcxproj /p:Platform=x64 /p:Configuration=Release'
-        
-    - name: Build scarlet-nexus-injector
-      shell: cmd
-      run: 'msbuild scarlet-nexus-injector/scarlet-nexus-injector.vcxproj /p:Platform=x64 /p:Configuration=Release'
-      
-    - name: Upload binaries to GitHub
-      uses: actions/upload-artifact@v2
-      with:
-        name: scarlet-nexus
-        path: |
-          bin/Release/scarlet-nexus.dll
-          bin/Release/scarlet-nexus-injector.exe
+      - name: Check CMake version
+        run: cmake --version
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      - name: Generate CMake project
+        run: cmake -D CMAKE_BUILD_TYPE=Release -S. -Bbuild -G Ninja
+
+      - name: Build 64bit release DLL
+        run: cmake --build ./build --config Release --target ScarletNexus --
+
+      - name: Check if DLL got built
+        run: if (-Not (Test-Path -path "build/ScarletNexus.dll")) {throw 1}
+
+      - name: Rename DLL to ScarletNexus-dev-{GITHUB_SHA}.dll
+        run: |
+          del ScarletNexus-dev-*.dll
+          ren ScarletNexus.dll ScarletNexus-dev-${{github.sha}}.dll
+        working-directory: build/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary
+          path: build/ScarletNexus-dev-*.dll

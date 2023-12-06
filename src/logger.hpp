@@ -1,7 +1,11 @@
 #pragma once
 #include "common.hpp"
+
+#pragma warning(push)
+#pragma warning (disable:4100)
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
+#pragma warning(pop)
 
 namespace big
 {

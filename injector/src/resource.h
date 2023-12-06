@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by scarlet-nexus-injector.rc
+// Used by injector.rc
 //
 #define IDI_ICON1                       101
 

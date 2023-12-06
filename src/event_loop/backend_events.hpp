@@ -8,7 +8,5 @@ namespace big
 		static void features();
 		static void player_skill_event();
 		static void script_func();
-		static void server_task();
-		static void server_event();
 	};
 }

@@ -47,19 +47,19 @@
 
 #include <regex>
 #include <tlhelp32.h>
-#include <cpr/cpr.h>
 
 #include <nlohmann/json.hpp>
 
 #include "settings.hpp"
 #include "logger.hpp"
-#include "subprocess.hpp"
 
-#pragma comment(lib, "Ws2_32.Lib")
-#pragma comment(lib, "Wldap32.Lib")
-#pragma comment(lib, "Crypt32.Lib")
+#define MOD_NAME "Ellohim Private Menu"
 
-#define NODISCARD [[nodiscard]]
+#define PRODUCT_NAME "Ellohim"
+
+#define DISTANCE_SPAWN 10
+
+#define CUSTOM_HUD "Madang Hese Udud Hese Teu Boga Duit Wuhan Kontol"
 
 namespace big
 {
@@ -68,12 +68,6 @@ namespace big
 	template <typename T>
 	using comptr = Microsoft::WRL::ComPtr<T>;
 
-#ifdef _DEBUG
-	inline const std::string g_base_url = "http://localhost:8000.com/api/v1";
-#else
-	inline const std::string g_base_url = "https://big-base.000webhostapp.com/api/v1";
-#endif
-	inline uint32_t g_injection_code{};
 	inline HMODULE g_hmodule{};
 	inline HANDLE g_main_thread{};
 	inline DWORD g_main_thread_id{};

@@ -34,7 +34,7 @@ namespace big
 		ID3D11Device* m_d3d_device = nullptr;
 		ID3D11DeviceContext* m_d3d_context = nullptr;
 	public:
-		inline DWORD get_process_id(LPCWSTR ProcessName)
+		inline DWORD get_process_id(LPCSTR ProcessName)
 		{
 			PROCESSENTRY32 pt;
 			HANDLE hsnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
