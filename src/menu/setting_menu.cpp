@@ -3,6 +3,7 @@
 #include "setting_menu.h"
 #include "utility/player.hpp"
 #include "settings.hpp"
+#include "server/server_module.hpp"
 
 namespace big
 {
@@ -11,6 +12,11 @@ namespace big
         if (ImGui::Button("Quit"))
         {
             g_running = false;
+        }
+
+        if (ImGui::Button("Test Socket"))
+        {
+            g_server_module->get_alpha()->find();
         }
     }
 

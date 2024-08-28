@@ -12,6 +12,7 @@ include(scripts/g3log.cmake)
 
 message("\nFetching custom modules")
 include(scripts/imgui.cmake)
+include(scripts/websocket.cmake)
 
 
 # ScarletNexus
@@ -31,22 +32,25 @@ else ()
   add_compile_options(-Wa,-mbig-obj)
 endif ()
 
+add_library(easyws STATIC "${websocket_SOURCE_DIR}/easywsclient.cpp")
+
 add_library(ScarletNexus MODULE "${SRC_MAIN}")
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(TARGET ScarletNexus PROPERTY CXX_STANDARD 23) # 23 Because std::format is not avalible in std:c++20 for some reason. Maybe it's because i use v142 toolset.
 
-source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN} )
+source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN})
 
 target_include_directories(ScarletNexus PRIVATE 
     "${SRC_DIR}"
     "${json_SOURCE_DIR}/single_include"
     "${gtav_classes_SOURCE_DIR}"
     "${imgui_SOURCE_DIR}"
+    "${websocket_SOURCE_DIR}"
 )
 
 target_precompile_headers(ScarletNexus PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(ScarletNexus PRIVATE minhook imgui g3log)
+target_link_libraries(ScarletNexus PRIVATE minhook imgui g3log easyws)
 
 # Warnings as errors
 set_property(TARGET ScarletNexus PROPERTY COMPILE_WARNING_AS_ERROR ON)

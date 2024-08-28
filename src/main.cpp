@@ -8,6 +8,8 @@
 #include "script_mgr.hpp"
 #include "settings.hpp"
 #include "benchmark.hpp"
+
+#include "server/server_module.hpp"
 #include "event_loop/backend_events.hpp"
 
 #include "services/gui/gui_service.hpp"
@@ -23,6 +25,7 @@ DWORD APIENTRY main_thread(LPVOID)
 	benchmark initialization_benchmark("Initialization");
 
 	auto logger_instance = std::make_unique<logger>("Scarlet Nexus");
+
 	try
 	{
 		LOG(RAW_GREEN_TO_CONSOLE) << R"kek(
@@ -56,6 +59,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto notification_instance = std::make_unique<notification_service>();
 		LOG(HACKER) << "Service registered.";
 
+		auto server_instance = std::make_unique<server_module>();
+		LOG(HACKER) << "Server initialized.";
+
 		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_skill_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
@@ -79,6 +85,9 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		g_script_mgr.remove_all_scripts();
 		LOG(HACKER) << "Scripts unregistered.";
+
+		server_instance.reset();
+		LOG(HACKER) << "Server unregistered.";
 
 		notification_instance.reset();
 		gui_service_instance.reset();

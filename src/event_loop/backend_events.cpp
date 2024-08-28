@@ -2,6 +2,7 @@
 #include "script.hpp"
 
 #include "utility/player.hpp"
+#include "server/server_module.hpp"
 
 
 namespace big
@@ -53,8 +54,9 @@ namespace big
 		{
 			TRY_CLAUSE
 			{
-				g_settings->attempt_save();
 				features();
+				g_settings->attempt_save();
+				g_server_module->get_alpha()->poll();
 			} 
 			EXCEPT_CLAUSE
 			script::get_current()->yield();
