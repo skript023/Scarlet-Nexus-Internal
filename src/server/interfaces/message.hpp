@@ -16,9 +16,9 @@ namespace big
 
         void operator=(nlohmann::json const& data)
         {
-            *this = data.get<Request>();
+            *this = data.get<Message>();
         }
 
-        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Request, event, data)
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Message, event, data)
     };
 }

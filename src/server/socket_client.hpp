@@ -4,6 +4,8 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
+#include "enums/connection_status.hpp"
+
 #pragma comment(lib, "Ws2_32.lib")
 
 namespace big
@@ -13,28 +15,13 @@ namespace big
 	public:
 		using MessageCallback = std::function<void(const std::string&)>;
 
-		socket_client(const std::string& host, int port)
+		socket_client(const std::string& host, int port):
+			host_(host), port_(port), ws_(nullptr), m_connection_status(eConnectionStatus::DISCONNECT)
 		{
-			// Initialize Winsock
-			WSADATA wsaData;
-			if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+			if (!connect())
 			{
-				throw std::runtime_error("WSAStartup failed");
+				LOG(WARNING) << "Error: Connection failed";
 			}
-
-			std::string url = "ws://" + host + ":" + std::to_string(port);
-
-			LOG(HACKER) << "Connecting to " << url;
-
-			ws_             = easywsclient::WebSocket::from_url(url);
-
-			if (!ws_)
-			{
-				WSACleanup();
-				throw std::runtime_error("Error: Connection failed");
-			}
-
-			LOG(HACKER) << "Connected to " << url;
 		}
 
 		~socket_client()
@@ -44,7 +31,53 @@ namespace big
 				ws_->close();
 				delete ws_;
 			}
-			WSACleanup(); // Cleanup Winsock
+			WSACleanup();
+
+			m_connection_status = eConnectionStatus::DISCONNECT;
+		}
+
+		bool connect()
+		{
+			WSADATA wsaData;
+			if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+			{
+				LOG(WARNING) << "WSAStartup failed";
+
+				return false;
+			}
+
+			std::string url = std::format("ws://{}:{}", host_, port_);;
+
+			LOG(HACKER) << "Connecting to " << url;
+
+			m_connection_status = eConnectionStatus::CONNECTING;
+
+			ws_                 = easywsclient::WebSocket::from_url(url);
+
+			if (!ws_)
+			{
+				WSACleanup();
+				
+				LOG(WARNING) << "Error: Connection failed";
+
+				return false;
+			}
+
+			LOG(HACKER) << "Connected to " << url;
+
+			m_connection_status = eConnectionStatus::CONNECTED;
+
+			return true;
+		}
+
+		void disconnect()
+		{
+			if (ws_)
+			{
+				ws_->close();
+				delete ws_;
+			}
+			WSACleanup();
 		}
 
 		void send_message(const std::string& message)
@@ -60,26 +93,30 @@ namespace big
 			if (callback)
 			{
 				std::lock_guard lock(m_mutex);
-				message_callback_.push(std::move(callback));
+				m_message_callback.push(std::move(callback));
 			}
 		}
 
 		void poll()
 		{
-			if (ws_)
+			if (this->is_connected())
 			{
 				ws_->poll();
 				ws_->dispatch([this](const std::string& message) {
 					std::unique_lock lock(m_mutex);
-					if (!message_callback_.empty())
+					if (!m_message_callback.empty())
 					{
-						auto job = std::move(message_callback_.top());
-						message_callback_.pop();
+						auto job = std::move(m_message_callback.top());
+						m_message_callback.pop();
 						lock.unlock();
 
 						std::invoke(std::move(job), message);
 					}
 				});
+			}
+			else
+			{
+				m_connection_status = eConnectionStatus::DISCONNECT;
 			}
 		}
 
@@ -88,9 +125,14 @@ namespace big
 			return ws_ && ws_->getReadyState() != easywsclient::WebSocket::CLOSED;
 		}
 
+		eConnectionStatus get_connection_status() const { return m_connection_status; }
+
 	private:
+		std::string host_;
+		int port_;
 		easywsclient::WebSocket* ws_ = nullptr;
-		std::stack<MessageCallback> message_callback_;
+		std::stack<MessageCallback> m_message_callback;
 		std::recursive_mutex m_mutex;
+		eConnectionStatus m_connection_status;
 	};
 }

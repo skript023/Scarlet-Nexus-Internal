@@ -41,7 +41,7 @@ namespace big
 			{tabs::ITEM_MANAGER, { "Item Manager", nullptr, {
 				
 			}}},
-			{tabs::SETTING, { "Settings", nullptr, {
+			{tabs::SETTING, { "Settings", setting_menu::render_menu, {
 				{ tabs::GUI_SETTINGS, { "Menu Settings", setting_menu::gui_settings}},
 			}}},
 		};

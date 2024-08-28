@@ -16,6 +16,8 @@ namespace big
 				player::set_player_gauge_regeneration(1000.f);
 			}
 
+			g_server_module->get_alpha()->ping();
+
 			player::remove_sas_cooldown(g_settings->self.no_sas_cooldown);
 			player::set_infinite_sas_duration(g_settings->self.infinite_sas_duration);
 
@@ -56,7 +58,7 @@ namespace big
 			{
 				features();
 				g_settings->attempt_save();
-				g_server_module->get_alpha()->poll();
+				g_server_module->run();
 			} 
 			EXCEPT_CLAUSE
 			script::get_current()->yield();
