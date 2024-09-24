@@ -4,6 +4,12 @@
 
 namespace big
 {
+	struct ImageDimensions
+	{
+		int x, y;
+		ImageDimensions() { x = y = 0; }
+		ImageDimensions(int _x, int _y) { x = _x; y = _y; }
+	};
 	class renderer
 	{
 	public:
@@ -21,7 +27,13 @@ namespace big
 		void merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas = false);
 
 		void wndproc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+		bool LoadTextureFromFile(const char* filename, ID3D11Device* d3dDevice, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
 	public:
+		ID3D11ShaderResourceView* m_header{};
+		ImageDimensions m_header_size = { 0, 0 };
+
+		ID3D11ShaderResourceView* m_toggle{};
+		ImageDimensions m_toggle_size = { 0, 0 };
 		ImFont* m_font = nullptr;
 		ImFont* m_monospace_font = nullptr;
 

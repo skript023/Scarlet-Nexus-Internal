@@ -12,6 +12,7 @@ include(scripts/g3log.cmake)
 
 message("\nFetching custom modules")
 include(scripts/imgui.cmake)
+include(scripts/stbi.cmake)
 include(scripts/websocket.cmake)
 
 
@@ -46,6 +47,7 @@ target_include_directories(ScarletNexus PRIVATE
     "${json_SOURCE_DIR}/single_include"
     "${gtav_classes_SOURCE_DIR}"
     "${imgui_SOURCE_DIR}"
+    "${stbi_SOURCE_DIR}"
     "${websocket_SOURCE_DIR}"
 )
 

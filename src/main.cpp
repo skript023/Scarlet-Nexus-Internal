@@ -9,6 +9,7 @@
 #include "settings.hpp"
 #include "benchmark.hpp"
 
+#include "ui/ui_manager.hpp"
 #include "server/server_module.hpp"
 #include "event_loop/backend_events.hpp"
 
@@ -44,6 +45,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(HACKER) << "Pointers initialized.";
 
 		auto renderer_instance = std::make_unique<renderer>();
+		auto ui_instance = std::make_unique<ui_manager>();
 		LOG(HACKER) << "Renderer initialized.";
 
 		auto fiber_pool_instance = std::make_unique<fiber_pool>(10);

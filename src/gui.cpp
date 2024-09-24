@@ -12,7 +12,8 @@
 #include "utility/player.hpp"
 
 #include <imgui.h>
-
+#include "ui/ui_manager.hpp"
+#include "menu/main_script.hpp"
 #include "menu/notification.h"
 #include "menu/navigation_menu.h"
 #include "services/notification/notification_service.hpp"
@@ -87,9 +88,10 @@ namespace big
 	void gui::dx_on_opened()
 	{
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImGui::ColorConvertU32ToFloat4(g_settings->window.color));
-		navigation::header();
-		navigation::render_menu();
-		navigation::active_view();
+		// navigation::header();
+		// navigation::render_menu();
+		// navigation::active_view();
+		g_ui_manager->tick();
 		ImGui::PopStyleColor();
 	}
 
@@ -97,11 +99,12 @@ namespace big
 	{
 		g_gui.m_opened = true;
 		g_notification_service->success("Welcome", "Scarlet Nexus Trainer Successfully Injected. Press insert to open");
+		main_script::initialize_main();
 	}
 
 	void gui::script_on_tick()
 	{
-		
+		g_ui_manager->game_tick();
 	}
 
 	void gui::script_func()

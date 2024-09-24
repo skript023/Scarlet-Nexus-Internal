@@ -10,6 +10,11 @@
 #include <backends/imgui_impl_win32.h>
 #include <imgui_internal.h>
 
+#include "ui/ui_manager.hpp"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //CW.exe+2D4E21610
 namespace big
@@ -137,6 +142,12 @@ namespace big
 		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
 
 		g_gui.dx_init();
+
+		if (!LoadTextureFromFile(std::format("{}\\Scarlet Nexus Trainer\\Textures\\Header.png", std::getenv("appdata")).c_str(), m_d3d_device, &m_header, &m_header_size.x, &m_header_size.y))
+			LOG(WARNING) << "Unable to load image header";
+
+		if (!LoadTextureFromFile(std::format("{}\\Scarlet Nexus Trainer\\Textures\\Toggle.png", std::getenv("appdata")).c_str(), m_d3d_device, &m_toggle, &m_toggle_size.x, &m_toggle_size.y))
+			LOG(WARNING) << "Unable to load image toggle";
 	}
 
 	void renderer::pre_reset()
@@ -188,6 +199,8 @@ namespace big
 			g_running = false;
 		}
 			
+		g_ui_manager->check_for_input();
+		g_ui_manager->handle_input();
 
 		if (g_gui.m_opened)
 		{
@@ -195,7 +208,78 @@ namespace big
 		}
 	}
 
-	void renderer::merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas)
+    bool renderer::LoadTextureFromFile(const char *filename, ID3D11Device *d3dDevice, ID3D11ShaderResourceView **out_srv, int *out_width, int *out_height)
+    {
+        // Load from disk into a raw RGBA buffer
+		LOG(INFO) << "Loading texture from " << filename;
+
+		int image_width = 0;
+		int image_height = 0;
+		unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+		if (image_data == NULL) 
+		{
+			LOG(WARNING) << "Failed to load image: " << stbi_failure_reason();
+
+			return false;
+		}
+
+		// Create texture
+		D3D11_TEXTURE2D_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+		desc.Width = image_width;
+		desc.Height = image_height;
+		desc.MipLevels = 1;
+		desc.ArraySize = 1;
+		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.SampleDesc.Count = 1;
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		desc.CPUAccessFlags = 0;
+
+		ID3D11Texture2D* pTexture = nullptr;
+		D3D11_SUBRESOURCE_DATA subResource;
+		subResource.pSysMem = image_data;
+		subResource.SysMemPitch = desc.Width * 4; // Assuming 4 bytes per pixel
+		subResource.SysMemSlicePitch = 0;
+
+		HRESULT hr = d3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+		if (FAILED(hr)) 
+		{
+			LOG(WARNING) << "Failed to create texture. HRESULT: " << hr;
+			stbi_image_free(image_data); // Free image data on failure
+
+			return false;
+		}
+
+		// Create texture view
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		ZeroMemory(&srvDesc, sizeof(srvDesc));
+		srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = desc.MipLevels;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+
+		hr = d3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+		if (FAILED(hr)) 
+		{
+			LOG(WARNING) << "Failed to create shader resource view. HRESULT: " << hr;
+			pTexture->Release(); // Release texture on failure
+			stbi_image_free(image_data); // Free image data
+			
+			return false;
+		}
+
+		pTexture->Release();
+		*out_width = image_width;
+		*out_height = image_height;
+		stbi_image_free(image_data); // Free the image data after usage
+
+		LOG(INFO) << "Loaded texture " << filename << " with dimensions: " << image_width << "x" << image_height;
+
+		return true;
+    }
+
+    void renderer::merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas)
 	{
 		static const ImWchar icons_ranges[3] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
 
