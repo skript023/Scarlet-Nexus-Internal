@@ -1,8 +1,8 @@
 #pragma once
 #include "common.hpp"
 #include "detour_hook.hpp"
-#include "vmt_hook.hpp"
 #include "class/uobject.hpp"
+#include "hooking/vmt_hook.hpp"
 
 namespace big
 {

@@ -1,13 +1,14 @@
 ﻿#include "common.hpp"
-#include "fiber_pool.hpp"
 #include "gui.hpp"
 #include "logger.hpp"
 #include "hooking.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
-#include "script_mgr.hpp"
 #include "settings.hpp"
 #include "benchmark.hpp"
+#include "ufunction.hpp"
+#include "script_mgr.hpp"
+#include "fiber_pool.hpp"
 
 #include "ui/ui_manager.hpp"
 #include "server/server_module.hpp"
@@ -57,6 +58,9 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(HACKER) << "Hooking initialized.";
 
+		auto ufunctions_instance = std::make_unique<ufunction>();
+		LOG(HACKER) << "Ufunctions initialized.";
+
 		auto gui_service_instance = std::make_unique<gui_service>();
 		auto notification_instance = std::make_unique<notification_service>();
 		LOG(HACKER) << "Service registered.";
@@ -77,6 +81,7 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		while (g_running)
 		{
+			g_settings->attempt_save();
 			std::this_thread::sleep_for(2s);
 		}
 

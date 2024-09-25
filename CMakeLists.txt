@@ -44,6 +44,7 @@ source_group(TREE ${SRC_DIR} PREFIX "src" FILES ${SRC_MAIN})
 
 target_include_directories(ScarletNexus PRIVATE 
     "${SRC_DIR}"
+    "${SRC_DIR}/unreal_engine"
     "${json_SOURCE_DIR}/single_include"
     "${gtav_classes_SOURCE_DIR}"
     "${imgui_SOURCE_DIR}"
@@ -55,7 +56,7 @@ target_precompile_headers(ScarletNexus PRIVATE "${SRC_DIR}/common.hpp")
 target_link_libraries(ScarletNexus PRIVATE minhook imgui g3log easyws)
 
 # Warnings as errors
-set_property(TARGET ScarletNexus PROPERTY COMPILE_WARNING_AS_ERROR ON)
+#set_property(TARGET ScarletNexus PROPERTY COMPILE_WARNING_AS_ERROR ON)
 
 add_compile_definitions(ScarletNexus 
     "_CRT_SECURE_NO_WARNINGS"

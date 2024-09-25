@@ -3,7 +3,7 @@
 
 #include "utility/player.hpp"
 #include "server/server_module.hpp"
-
+#include "SDK/BattlePrototype_classes.hpp"
 
 namespace big
 {
@@ -13,7 +13,7 @@ namespace big
 		{
 			if (g_settings->self.infinite_psychic)
 			{
-				player::set_player_gauge_regeneration(1000.f);
+				player::set_player_gauge_regeneration(20000.f);
 			}
 
 			g_server_module->get_alpha()->ping();
@@ -27,6 +27,9 @@ namespace big
 			player::item_usage_no_cooldown(g_settings->self.no_items_cooldown);
 			player::infinite_player_credits(g_settings->self.infinite_credits);
 			player::infinite_health(g_settings->self.infinite_health);
+			SDK::IBattleEnemyInterface::GetDefaultObj()->SetHp_Native(0);
+			player::set_ignore_damage(g_settings->self.ignore_damage);
+			//SDK::UCharactersParameterComponent::GetCharactersParameterComponentFromActor(SDK::AActor::GetDefaultObj()->GetParentActor())->SetCharacterIgnoreDamageFlag(g_settings->self.ignore_damage);
 		}
 	}
 
@@ -57,7 +60,7 @@ namespace big
 			TRY_CLAUSE
 			{
 				features();
-				g_settings->attempt_save();
+				
 				g_server_module->run();
 			} 
 			EXCEPT_CLAUSE

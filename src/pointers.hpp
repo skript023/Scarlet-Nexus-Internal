@@ -3,6 +3,7 @@
 #include "function_types.hpp"
 #include "class/engine_sdk.hpp"
 #include <class/vector.hpp>
+#include <unreal_engine/SDK/Engine_classes.hpp>
 
 namespace big
 {
@@ -43,7 +44,7 @@ namespace big
 			{
 				do
 				{
-					if (!lstrcmpi(pt.szExeFile, ProcessName))
+					if (!lstrcmpiA(pt.szExeFile, ProcessName))
 					{
 						CloseHandle(hsnap);
 						return pt.th32ProcessID;

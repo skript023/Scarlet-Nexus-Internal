@@ -173,10 +173,15 @@ namespace big
 				{
 					if (object->get_fullname() == name)
 					{
+						LOG(HACKER) << "found object with name " << name;
+						
 						return static_cast<T>(object);
 					}
 				}
 			}
+
+			LOG(INFO) << "Object not found";
+
 			return nullptr;
 		}
 

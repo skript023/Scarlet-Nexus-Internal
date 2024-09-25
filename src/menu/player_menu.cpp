@@ -3,6 +3,7 @@
 #include "submenu.hpp"
 #include "settings.hpp"
 #include "player_menu.h"
+#include "ufunction.hpp"
 #include "utility/player.hpp"
 
 namespace big
@@ -87,10 +88,27 @@ namespace big
     {
         g_ui_manager->add_submenu<regular_submenu>("Player", SubmenuPlayer, [](regular_submenu* sub)
         {
-            // sub->add_option<reguler_option>("Option", nullptr, []
-            // {
-            //     LOG(INFO) << "You pressed the test option";
-            // });
+            sub->add_option<reguler_option>("Enter Brain Dive", nullptr, []
+            {
+                // auto setHP = g_ufunction->get_native("Function BattlePrototype.BattleEnemyInterface.SetHp_Native");
+                // auto UIHealthControl = g_ufunction->get_class("Class BattlePrototype.UIHealthControl");
+
+                // if (setHP && UIHealthControl)
+                // {
+                //     struct Parameter 
+                //     { 
+                //         int set_health;
+                //         bool ret;
+                //     } parameter;
+
+                //     parameter.set_health = 0;
+
+                //     ufunction::execute_native_function(UIHealthControl, "Function BattlePrototype.BattleEnemyInterface.SetHp_Native", &parameter);
+
+                //     LOG(INFO) << "Object: " << setHP;
+                // }
+                player::enter_brain_drive();
+            });
 
             sub->add_option<bool_option<bool>>("Infinite Psychic Gauge", nullptr, &g_settings->self.infinite_psychic);
             sub->add_option<bool_option<bool>>("SAS No Cooldown", nullptr, &g_settings->self.no_sas_cooldown);
@@ -103,14 +121,27 @@ namespace big
             sub->add_option<bool_option<bool>>("Infinite Brain Drive", nullptr, &g_settings->self.infinite_brain_dive);
             sub->add_option<bool_option<bool>>("Instant Brain Field", nullptr, &g_settings->self.instant_brain_field);
             sub->add_option<bool_option<bool>>("Infinite Health", nullptr, &g_settings->self.infinite_health);
+            
+            sub->add_option<bool_option<bool>>("Ignore Damage", nullptr, &g_settings->self.ignore_damage);
 
-            static std::int32_t int32Test{ 69 };
-            sub->add_option<number_option<std::int32_t>>("Int32", nullptr, &int32Test, 0, 100);
+            if (auto pg = player::get_player_gauge())
+                sub->add_option<number_option<float>>("Set Psychic Gauge", nullptr, pg, 0, 1000.f);
 
-            static std::int64_t int64Test{ 420 };
-            sub->add_option<number_option<std::int64_t>>("Int64", nullptr, &int64Test, 0, 1000, 10);
+            static int bp{ 1 };
+            sub->add_option<number_option<int>>("Set Battle Point", nullptr, &bp, 0, INT32_MAX, true, [] {
+                player::set_player_battle_point(bp);
+            });
 
-            sub->add_option<number_option<float>>("EXP Multiplier", nullptr, player::player_exp_multiplier(), 0.f, 10.f, 0.1f, 1);
+            static int cr{ 1 };
+            sub->add_option<number_option<int>>("Set Credits", nullptr, &cr, 0, INT32_MAX, true, [] {
+                player::set_player_credits(cr);
+            });
+
+            // static std::int64_t int64Test{ 420 };
+            // sub->add_option<number_option<std::int64_t>>("Int64", nullptr, &int64Test, 0, 1000, 10);
+
+            if (auto exp = player::player_exp_multiplier())
+                sub->add_option<number_option<float>>("EXP Multiplier", nullptr, exp, 0.f, 10.f, 0.1f, 1);
 
             static std::vector<std::uint64_t> vector{ 1, 2, 3 };
             static std::size_t vectorPos{};

@@ -128,7 +128,7 @@ namespace big
 		Color m_toggle_off_color{ 46, 46, 46, 255 };
 		Color m_submenu_rect_color{ 94, 94, 94, 180 };
 		Color m_option_selected_text_color{ 10, 10, 10, 255 };
-		Color m_option_unselected_text_color{ 153, 153, 153, 160 };
+		Color m_option_unselected_text_color{ 153, 153, 153, 255 };
 		Color m_option_selected_background_color{ 178, 178, 178, 255 };
 		Color m_option_unselected_background_color{ 0, 0, 0, 160 };
 

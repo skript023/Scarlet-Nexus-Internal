@@ -76,6 +76,14 @@ namespace big::player
 		}
 	}
 
+	inline float* get_player_gauge()
+	{
+		if (auto pychic_addr = unreal_engine::get_character_base())
+			return &pychic_addr->m_gauge_base->m_telekinetic_gauge;
+
+		return nullptr;
+	}
+
 	inline void set_player_gauge_regeneration(float pychic)
 	{
 		if (auto pychic_addr = unreal_engine::get_character_base())
@@ -185,10 +193,10 @@ namespace big::player
 
 	inline void infinite_battle_points_ex(bool activate)
 	{
-		//if (activate)
-			//*(uint8_t*)g_pointers->m_battle_points_handle = 0xC3;
-		//else
-			//*(uint8_t*)g_pointers->m_battle_points_handle = 0x48;
+		if (activate)
+			*(uint8_t*)g_pointers->m_battle_points_handle = 0xC3;
+		else
+			*(uint8_t*)g_pointers->m_battle_points_handle = 0x48;
 	}
 
 	inline void modify_player_skill(int slot, int8_t skillId)

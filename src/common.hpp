@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable:4369 4129)
+
 #include <SDKDDKVer.h>
 #include <Windows.h>
 #include <Xinput.h>
