@@ -261,11 +261,11 @@ namespace big::player
 		return 0;
 	}
 
-	inline int get_player_credits()
+	inline int* get_player_credits()
 	{
 		if (auto base = unreal_engine::get_user_params())
 		{
-			return base->m_credit;
+			return &base->m_credit;
 		}
 
 		return 0;
@@ -281,18 +281,18 @@ namespace big::player
 
 	inline void infinite_player_credits(bool activate)
 	{
-		static const auto credits = get_player_credits();
+		static const auto credits = *get_player_credits();
 		if (activate)
 		{
 			set_player_credits(credits);
 		}
 	}
 
-	inline int get_player_battle_point()
+	inline int* get_player_battle_point()
 	{
 		if (auto base = unreal_engine::get_user_params())
 		{
-			return base->m_skill_point;
+			return &base->m_skill_point;
 		}
 
 		return 0;
@@ -308,7 +308,7 @@ namespace big::player
 
 	inline void infinite_battle_points(bool activate)
 	{
-		static const auto battle_points = get_player_credits();
+		static const auto battle_points = *get_player_credits();
 		if (activate)
 		{
 			set_player_battle_point(battle_points);

@@ -125,23 +125,19 @@ namespace big
             sub->add_option<bool_option<bool>>("Ignore Damage", nullptr, &g_settings->self.ignore_damage);
 
             if (auto pg = player::get_player_gauge())
-                sub->add_option<number_option<float>>("Set Psychic Gauge", nullptr, pg, 0, 1000.f);
+                sub->add_option<number_option<float>>("Set Psychic Gauge", nullptr, pg, 0.f, 1000.f, 0.1f, 1);
 
-            static int bp{ 1 };
-            sub->add_option<number_option<int>>("Set Battle Point", nullptr, &bp, 0, INT32_MAX, true, [] {
-                player::set_player_battle_point(bp);
-            });
+            if (auto bp = player::get_player_battle_point())
+                sub->add_option<number_option<int>>("Set Battle Point", nullptr, bp, 0, 5000000);
 
-            static int cr{ 1 };
-            sub->add_option<number_option<int>>("Set Credits", nullptr, &cr, 0, INT32_MAX, true, [] {
-                player::set_player_credits(cr);
-            });
+            if (auto cr = player::get_player_credits())
+                sub->add_option<number_option<int>>("Set Credits", nullptr, cr, 0, 5000000);
 
             // static std::int64_t int64Test{ 420 };
             // sub->add_option<number_option<std::int64_t>>("Int64", nullptr, &int64Test, 0, 1000, 10);
 
             if (auto exp = player::player_exp_multiplier())
-                sub->add_option<number_option<float>>("EXP Multiplier", nullptr, exp, 0.f, 10.f, 0.1f, 1);
+                sub->add_option<number_option<float>>("EXP Multiplier", nullptr, exp, 0.f, 1000.f, 0.1f, 1);
 
             static std::vector<std::uint64_t> vector{ 1, 2, 3 };
             static std::size_t vectorPos{};
