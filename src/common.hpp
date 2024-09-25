@@ -2,6 +2,7 @@
 
 #include <SDKDDKVer.h>
 #include <Windows.h>
+#include <Xinput.h>
 #include <D3D11.h>
 #include <wrl/client.h>
 
@@ -52,6 +53,8 @@
 
 #include "settings.hpp"
 #include "logger.hpp"
+
+#pragma comment(lib, "Xinput.lib")
 
 #define MOD_NAME "Ellohim Private Menu"
 

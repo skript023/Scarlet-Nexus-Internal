@@ -83,13 +83,13 @@ namespace big
 	{
 		reset_input();
 
-		m_open_key_pressed = unreal_engine::is_key_pressed(VK_INSERT);
-		m_back_key_pressed = unreal_engine::is_key_pressed(VK_BACK);
-		m_enter_key_pressed = unreal_engine::is_key_pressed(VK_RETURN);
-		m_up_key_pressed = unreal_engine::is_key_pressed(VK_UP);
-		m_down_key_pressed = unreal_engine::is_key_pressed(VK_DOWN);
-		m_left_key_pressed = unreal_engine::is_key_pressed(VK_LEFT);
-		m_right_key_pressed = unreal_engine::is_key_pressed(VK_RIGHT);
+		m_open_key_pressed = unreal_engine::is_key_pressed(VK_INSERT) || unreal_engine::is_controller_pressed(XINPUT_GAMEPAD_BACK);
+		m_back_key_pressed = unreal_engine::is_key_pressed(VK_NUMPAD0) || unreal_engine::is_controller_pressed(XINPUT_GAMEPAD_B);
+		m_enter_key_pressed = unreal_engine::is_key_pressed(VK_NUMPAD5) || unreal_engine::is_controller_pressed(XINPUT_GAMEPAD_A);
+		m_up_key_pressed = unreal_engine::is_key_pressed(VK_NUMPAD8) || unreal_engine::is_controller_pressed(XINPUT_GAMEPAD_DPAD_UP);
+		m_down_key_pressed = unreal_engine::is_key_pressed(VK_NUMPAD2) || unreal_engine::is_controller_pressed(XINPUT_GAMEPAD_DPAD_DOWN);
+		m_left_key_pressed = unreal_engine::is_key_pressed(VK_NUMPAD4) || unreal_engine::is_controller_pressed(XINPUT_GAMEPAD_DPAD_LEFT);
+		m_right_key_pressed = unreal_engine::is_key_pressed(VK_NUMPAD6) || unreal_engine::is_controller_pressed(XINPUT_GAMEPAD_DPAD_RIGHT);
 	}
 
 	void ui_manager::handle_input()
@@ -223,19 +223,19 @@ namespace big
 			m_pos.x + m_padding.x,
 			m_draw_base_y + (m_submenu_bar_height / 2.f) + m_padding.y,
 			m_submenu_bar_text_color,
-			g_renderer->m_font);
+			g_renderer->m_ui_manager_font);
 		draw_centered_text(
 			&centerText[0],
 			m_pos.x + (m_width / 2.f),
 			m_draw_base_y + (m_submenu_bar_height / 2.f) + m_padding.y,
 			m_submenu_bar_text_color,
-			g_renderer->m_font);
+			g_renderer->m_ui_manager_font);
 		draw_right_text(
 			&rightText[0],
 			m_pos.x + (m_width - m_padding.x),
 			m_draw_base_y + (m_submenu_bar_height / 2.f) + m_padding.y,
 			m_submenu_bar_text_color,
-			g_renderer->m_font);
+			g_renderer->m_ui_manager_font);
 
 		m_draw_base_y += m_submenu_bar_height;
 	}
@@ -247,13 +247,13 @@ namespace big
 			m_pos.x + m_padding.x,
 			m_draw_base_y + (m_option_height / 2.f) + m_padding.y,
 			selected ? m_option_selected_text_color : m_option_unselected_text_color,
-			g_renderer->m_font);
+			g_renderer->m_ui_manager_font);
 		draw_right_text(
 			opt->get_right_text(),
 			m_pos.x + (m_width - m_padding.x),
 			m_draw_base_y + (m_option_height / 2.f) + m_padding.y,
 			selected ? m_option_selected_text_color : m_option_unselected_text_color,
-			g_renderer->m_font);
+			g_renderer->m_ui_manager_font);
 
 		if (opt->get_flag(OptionFlag::Enterable))
 		{

@@ -48,6 +48,7 @@ namespace big
 			ImFont* font_icon = nullptr;
 
 			bool switched_view = true;
+			bool mouse_active = false;
 		};
 	public:
 		settings()
@@ -79,6 +80,7 @@ namespace big
 
 			this->window.color = j["window"]["color"];
 			this->window.gui_scale = j["window"]["gui_scale"];
+			this->window.mouse_active = j["window"]["mouse_active"];
 
 			this->skill.slot_1 = j["skill"]["slot_1"];
 			this->skill.slot_2 = j["skill"]["slot_2"];
@@ -110,7 +112,8 @@ namespace big
 				{
 					"window", {
 						{ "color", this->window.color },
-						{ "gui_scale", this->window.gui_scale }
+						{ "gui_scale", this->window.gui_scale },
+						{ "mouse_active", this->window.mouse_active }
 					}
 				},
 				{

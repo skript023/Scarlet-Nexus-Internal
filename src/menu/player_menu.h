@@ -7,6 +7,7 @@ namespace big
 	{
 	public:
 		static void render_menu();
+		static void render_submenu();
 		static void add_value();
 
 	private:

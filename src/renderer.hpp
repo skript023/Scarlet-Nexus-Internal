@@ -35,6 +35,7 @@ namespace big
 		ID3D11ShaderResourceView* m_toggle{};
 		ImageDimensions m_toggle_size = { 0, 0 };
 		ImFont* m_font = nullptr;
+		ImFont* m_ui_manager_font = nullptr;
 		ImFont* m_monospace_font = nullptr;
 
 		HWND m_window = NULL;
