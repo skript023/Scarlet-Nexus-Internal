@@ -5,6 +5,7 @@
 #include "player_menu.h"
 #include "ufunction.hpp"
 #include "utility/player.hpp"
+#include "SDK/BattlePrototype_classes.hpp"
 
 namespace big
 {
@@ -108,6 +109,14 @@ namespace big
                 //     LOG(INFO) << "Object: " << setHP;
                 // }
                 player::enter_brain_drive();
+            });
+
+            sub->add_option<reguler_option>("Set Max Bond Level", nullptr, [] {
+                SDK::UUserParamManager::GetDefaultObj()->SetBondsLevel(SDK::EPlayerID::Max, SDK::EPlayerID::FriendMax, 10, false);
+                SDK::UUserParamManager::GetDefaultObj()->SetTeamBondsLevel(SDK::EPlayerID::Max, 8);
+
+                LOG(INFO) << "Bond Level is " << SDK::UUserParamManager::GetDefaultObj()->GetBondsLevel(SDK::EPlayerID::FriendMax, SDK::EPlayerID::FriendMax);
+                LOG(INFO) << "Team Bond Level is " << SDK::UUserParamManager::GetDefaultObj()->GetTeamBondsLevel(SDK::EPlayerID::Ch0100);
             });
 
             sub->add_option<bool_option<bool>>("Infinite Psychic Gauge", nullptr, &g_settings->self.infinite_psychic);
