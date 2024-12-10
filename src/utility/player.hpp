@@ -19,6 +19,16 @@ namespace big::player
 		}
 	}
 
+	inline int get_player_health()
+	{
+		if (auto player_params = unreal_engine::get_character_base())
+		{
+			return player_params->m_character_params->m_health;
+		}
+
+		return 0;
+	}
+
 	inline int get_player_max_health()
 	{
 		if (auto player_params = unreal_engine::get_character_base())
@@ -292,7 +302,7 @@ namespace big::player
 	{
 		if (auto base = unreal_engine::get_user_params())
 		{
-			return &base->m_skill_point;
+			return &base->m_battle_point;
 		}
 
 		return 0;
@@ -302,7 +312,7 @@ namespace big::player
 	{
 		if (auto base = unreal_engine::get_user_params())
 		{
-			base->m_skill_point = battlePoints;
+			base->m_battle_point = battlePoints;
 		}
 	}
 
@@ -313,5 +323,23 @@ namespace big::player
 		{
 			set_player_battle_point(battle_points);
 		}
+	}
+
+	inline void set_skill_point(int skillPoints)
+	{
+		if (auto base = unreal_engine::get_user_params())
+        {
+            base->m_skill_point = skillPoints;
+        }
+	}
+
+	inline int* get_skill_point()
+	{
+		if (auto base = unreal_engine::get_user_params())
+        {
+            return &base->m_skill_point;
+        }
+
+		return nullptr;
 	}
 }

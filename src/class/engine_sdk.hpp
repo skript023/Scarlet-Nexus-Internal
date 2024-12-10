@@ -130,7 +130,8 @@ namespace big
 		char pad_0000[0x50]; //0x0000
 		int m_credit; //0x0050
 		char pad_0054[0x27C]; //0x0054
-		int m_skill_point; //0x02D0
+		int m_battle_point; //0x02D0
+		int m_skill_point; //0x02D4
 	};
 
 	class DamageCalc
@@ -213,7 +214,7 @@ namespace big
 
 	static_assert(sizeof(GameInstance) == 0x2E8, "GameInstance not Properly sized");
 	static_assert(sizeof(Character) == 0x1B40);
-	static_assert(sizeof(UserParamManager) == 0x2D4);
+	static_assert(sizeof(UserParamManager) == 0x2D8, "UserParamManager not proper sized");
 
 	static_assert(sizeof(CharacterMovement) == 0x16C);
 	static_assert(sizeof(CharactersParameter) == 0x0314);

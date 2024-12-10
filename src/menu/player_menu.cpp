@@ -91,32 +91,15 @@ namespace big
         {
             sub->add_option<reguler_option>("Enter Brain Dive", nullptr, []
             {
-                // auto setHP = g_ufunction->get_native("Function BattlePrototype.BattleEnemyInterface.SetHp_Native");
-                // auto UIHealthControl = g_ufunction->get_class("Class BattlePrototype.UIHealthControl");
-
-                // if (setHP && UIHealthControl)
-                // {
-                //     struct Parameter 
-                //     { 
-                //         int set_health;
-                //         bool ret;
-                //     } parameter;
-
-                //     parameter.set_health = 0;
-
-                //     ufunction::execute_native_function(UIHealthControl, "Function BattlePrototype.BattleEnemyInterface.SetHp_Native", &parameter);
-
-                //     LOG(INFO) << "Object: " << setHP;
-                // }
                 player::enter_brain_drive();
             });
 
             sub->add_option<reguler_option>("Set Max Bond Level", nullptr, [] {
-                SDK::UUserParamManager::GetDefaultObj()->SetBondsLevel(SDK::EPlayerID::Max, SDK::EPlayerID::FriendMax, 10, false);
-                SDK::UUserParamManager::GetDefaultObj()->SetTeamBondsLevel(SDK::EPlayerID::Max, 8);
-
-                LOG(INFO) << "Bond Level is " << SDK::UUserParamManager::GetDefaultObj()->GetBondsLevel(SDK::EPlayerID::FriendMax, SDK::EPlayerID::FriendMax);
-                LOG(INFO) << "Team Bond Level is " << SDK::UUserParamManager::GetDefaultObj()->GetTeamBondsLevel(SDK::EPlayerID::Ch0100);
+                if (auto userPtr = reinterpret_cast<SDK::UUserParamManager*>(unreal_engine::get_user_params())) 
+                {
+                    userPtr->AddBondsValue(SDK::EPlayerID::Max, SDK::EPlayerID::Max, 1000000);
+                    userPtr->SetTeamBondsLevel(SDK::EPlayerID::Ch0100, 6);
+                }
             });
 
             sub->add_option<bool_option<bool>>("Infinite Psychic Gauge", nullptr, &g_settings->self.infinite_psychic);
@@ -133,15 +116,27 @@ namespace big
             
             sub->add_option<bool_option<bool>>("Ignore Damage", nullptr, &g_settings->self.ignore_damage);
 
+            static UC::int32 hp = player::get_player_health();
+            static UC::int32 max_hp = player::get_player_max_health();
+
+            sub->add_option<number_option<UC::int32>>("Set Player HP", nullptr, &hp, 0, max_hp, 1, 3, true, "", "", [] {
+                player::set_player_health(hp);
+            });
+
             if (auto pg = player::get_player_gauge())
                 sub->add_option<number_option<float>>("Set Psychic Gauge", nullptr, pg, 0.f, 1000.f, 0.1f, 1);
 
             if (auto bp = player::get_player_battle_point())
-                sub->add_option<number_option<int>>("Set Battle Point", nullptr, bp, 0, 5000000);
+                sub->add_option<number_option<int>>("Set Battle Point", nullptr, bp, 0, INT32_MAX);
 
             if (auto cr = player::get_player_credits())
-                sub->add_option<number_option<int>>("Set Credits", nullptr, cr, 0, 5000000);
+                sub->add_option<number_option<int>>("Set Credits", nullptr, cr, 0, INT32_MAX);
 
+            if (auto sp = player::get_skill_point())
+                sub->add_option<number_option<int>>("Set Skill Point", nullptr, sp, 0, INT32_MAX);
+            
+
+            SDK::UWorld::GetWorld();
             // static std::int64_t int64Test{ 420 };
             // sub->add_option<number_option<std::int64_t>>("Int64", nullptr, &int64Test, 0, 1000, 10);
 
