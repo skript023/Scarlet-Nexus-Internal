@@ -46,7 +46,7 @@ namespace big
 	}
     void player_stat::render_submenu()
     {
-        g_ui_manager->add_submenu<regular_submenu>("Player", SubmenuStats, [](regular_submenu* sub)
+        g_ui_manager.add_submenu<regular_submenu>("Player", SubmenuStats, [](regular_submenu* sub)
         {
             if (auto character = unreal_engine::get_character_base())
             {

@@ -23,6 +23,36 @@ namespace big
 			return &m_description[0];
 		}
 
+		int get_integer() override
+		{
+			return m_integer;
+		}
+		
+		int get_min_integer() override
+		{
+			return m_min_integer;
+		}
+		
+		int get_max_integer() override
+		{
+			return m_max_integer;
+		}
+
+		float get_float() override
+		{
+			return m_float;
+		}
+		
+		float get_max_float() override
+		{
+			return m_float;
+		}
+		
+		float get_min_float() override
+		{
+			return m_float;
+		}
+
 		void handle_action(OptionAction action) override
 		{
 			if (action == OptionAction::EnterPress)
@@ -51,6 +81,20 @@ namespace big
 			return static_cast<T&>(*this);
 		}
 
+		T& set_integer(int value)
+		{
+			m_integer = value;
+
+			return static_cast<T&>(*this);
+		}
+
+		T& set_float(float value)
+		{
+			m_float = value;
+
+			return static_cast<T&>(*this);
+		}
+
 		T& set_description(const char* text)
 		{
 			if (text)
@@ -75,6 +119,12 @@ namespace big
 		char m_left_text[64] = {};
 		char m_right_text[64] = {};
 		char m_description[64] = {};
+		int m_integer = { 0 };
+		int m_min_integer = { 0 };
+		int m_max_integer = { 0 };
+		float m_float = { 0.f };
+		int m_min_float = { 0 };
+		int m_max_float = { 0 };
 		std::function<void()> m_action;
 	};
 }

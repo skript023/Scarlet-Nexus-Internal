@@ -45,8 +45,8 @@ namespace big
 		auto &colors = style.Colors;
 		colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-		colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(g_settings->window.color);
-		colors[ImGuiCol_ChildBg] = ImGui::ColorConvertU32ToFloat4(g_settings->window.color);
+		colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(g_settings.window.color);
+		colors[ImGuiCol_ChildBg] = ImGui::ColorConvertU32ToFloat4(g_settings.window.color);
 		colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
 		colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
 		colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
@@ -87,11 +87,11 @@ namespace big
 
 	void gui::dx_on_opened()
 	{
-		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImGui::ColorConvertU32ToFloat4(g_settings->window.color));
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImGui::ColorConvertU32ToFloat4(g_settings.window.color));
 		// navigation::header();
 		// navigation::render_menu();
 		// navigation::active_view();
-		g_ui_manager->tick();
+		g_ui_manager.tick();
 		ImGui::PopStyleColor();
 	}
 
@@ -104,7 +104,7 @@ namespace big
 
 	void gui::script_on_tick()
 	{
-		g_ui_manager->game_tick();
+		g_ui_manager.game_tick();
 	}
 
 	void gui::script_func()

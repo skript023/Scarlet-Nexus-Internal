@@ -58,13 +58,14 @@
 
 #pragma comment(lib, "Xinput.lib")
 
-#define MOD_NAME "Ellohim Private Menu"
+#define GAME "Game.exe"
+#define GAME_NAME "Scarlet Nexus"
+#define FOLDER_NAME "Scarlet Nexus Trainer"
+#define LOG_NAME "ScarletNexus.log"
+#define LOG_EVENT_NAME "ScarletNexusEvents.log"
 
-#define PRODUCT_NAME "Ellohim"
-
-#define DISTANCE_SPAWN 10
-
-#define CUSTOM_HUD "Madang Hese Udud Hese Teu Boga Duit Wuhan Kontol"
+#define WINDOW_CLASS "UnrealWindow"
+#define WINDOW_NAME "ScarletNexus  "
 
 namespace big
 {

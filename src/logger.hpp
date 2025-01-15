@@ -1,6 +1,8 @@
 #pragma once
 #include "common.hpp"
 
+#include "file_manager/file.hpp"
+
 #pragma warning(push)
 #pragma warning (disable:4100)
 #include <g3log/g3log.hpp>
@@ -54,9 +56,9 @@ namespace big
 	class logger
 	{
 	public:
-		explicit logger(std::string_view logger_name) :
+		explicit logger(std::string_view logger_name, file file) :
 			m_console_name(logger_name),
-			m_file_path(std::getenv("appdata")),
+			m_file(file),
 			m_worker(g3::LogWorker::createLogWorker())
 		{
 			if (m_did_console_exist = AttachConsole(GetCurrentProcessId()); !m_did_console_exist)
@@ -81,50 +83,20 @@ namespace big
 				m_console_out.open("CONOUT$", std::ios_base::out | std::ios_base::app);
 			}
 
-			m_file_path /= "Scarlet Nexus Trainer";
-			std::filesystem::path m_backup_path = m_file_path;
-			m_backup_path /= "Backup";
 			try
 			{
-				if (!std::filesystem::exists(m_file_path))
+				if (m_file.exists())
 				{
-					std::filesystem::create_directory(m_file_path);
-				}
-				else if (!std::filesystem::is_directory(m_file_path))
-				{
-					std::filesystem::remove(m_file_path);
-					std::filesystem::create_directory(m_file_path);
-				}
-				if (!std::filesystem::exists(m_backup_path))
-				{
-					std::filesystem::create_directory(m_backup_path);
-				}
-				else if (!std::filesystem::is_directory(m_backup_path))
-				{
-					std::filesystem::remove(m_backup_path);
-					std::filesystem::create_directory(m_backup_path);
-				}
-
-				m_event_file_path = m_file_path;
-				m_file_path /= "Scarlet Nexus.log";
-				m_event_file_path /= "Scarlet Nexusvents.log";
-
-				if (std::filesystem::exists(m_file_path))
-				{
-					auto file_time = std::filesystem::last_write_time(m_file_path);
+					auto file_time = std::filesystem::last_write_time(m_file.get_path());
 					auto timet = to_time_t(file_time);
 					auto local_time = std::localtime(&timet);
 
-					auto bigbase_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} BigBaseV2.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
-					auto gta_events_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} GTAEvents.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
+					auto bigbase_timestamp = std::format("{:0>2}-{:0>2}-{}-{:0>2}-{:0>2}-{:0>2} ScarletNexus.log", local_time->tm_mon + 1, local_time->tm_mday, local_time->tm_year + 1900, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
 
-					std::filesystem::copy_file(m_file_path, m_backup_path / bigbase_timestamp);
-					if (std::filesystem::exists(m_event_file_path) && !std::filesystem::is_empty(m_event_file_path))
-						std::filesystem::copy_file(m_event_file_path, m_backup_path / gta_events_timestamp);
+					file.move(std::format("./backup/{}", bigbase_timestamp));
 				}
 
-				m_file_out.open(m_file_path, std::ios_base::out | std::ios_base::trunc);
-				m_gta_event_file_out.open(m_event_file_path, std::ios_base::out | std::ios_base::trunc);
+				m_file_out.open(m_file, std::ios_base::out | std::ios_base::trunc);
 
 				m_worker->addSink(std::make_unique<log_sink>(), &log_sink::callback);
 				g3::initializeLogging(m_worker.get());
@@ -173,10 +145,7 @@ namespace big
 				
 				if (!(level_value & FLAG_NO_DISK))
 				{
-					if (level_value == EVENT.value)
-						g_logger->m_gta_event_file_out << log_message.toString(format_file) << std::flush;
-					else
-						g_logger->m_file_out << log_message.toString(is_raw ? format_raw : format_file) << std::flush;
+					g_logger->m_file_out << log_message.toString(is_raw ? format_raw : format_file) << std::flush;
 				}
 			}
 
@@ -215,7 +184,7 @@ namespace big
 		DWORD m_original_console_mode;
 		HANDLE m_console_handle{};
 		std::ofstream m_console_out;
-		std::filesystem::path m_file_path;
+		file m_file;
 		std::filesystem::path m_event_file_path;
 		std::ofstream m_file_out;
 		std::ofstream m_gta_event_file_out;

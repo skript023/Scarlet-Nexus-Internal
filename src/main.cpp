@@ -9,6 +9,7 @@
 #include "ufunction.hpp"
 #include "script_mgr.hpp"
 #include "fiber_pool.hpp"
+#include "file_manager.hpp"
 
 #include "ui/ui_manager.hpp"
 #include "server/server_module.hpp"
@@ -26,7 +27,12 @@ DWORD APIENTRY main_thread(LPVOID)
 
 	benchmark initialization_benchmark("Initialization");
 
-	auto logger_instance = std::make_unique<logger>("Scarlet Nexus");
+	std::filesystem::path base_dir = std::getenv("appdata");
+	base_dir /= FOLDER_NAME;
+
+	g_file_manager.init(base_dir);
+
+	auto logger_instance = std::make_unique<logger>("Scarlet Nexus", g_file_manager.get_project_file(std::format("./{}.log", LOG_NAME)));
 
 	try
 	{
@@ -38,8 +44,7 @@ DWORD APIENTRY main_thread(LPVOID)
  ____) | (_| (_| | |  | |  __/ |_| |\  |  __/>  <| |_| \__ \ | | | (_| | | | | |  __/ |   
 |_____/ \___\__,_|_|  |_|\___|\__|_| \_|\___/_/\_,\____|___/_|_|  \__,_|_|_| |_|\___|_| 
 )kek";
-		auto settings_instance = std::make_unique<settings>();
-		g_settings->load();
+		g_settings.load();
 		LOG(HACKER) << "Settings initialized.";
 		
 		auto pointers_instance = std::make_unique<pointers>();
@@ -81,7 +86,7 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		while (g_running)
 		{
-			g_settings->attempt_save();
+			g_settings.attempt_save();
 			std::this_thread::sleep_for(2s);
 		}
 
@@ -118,8 +123,7 @@ DWORD APIENTRY main_thread(LPVOID)
 		pointers_instance.reset();
 		LOG(HACKER) << "Pointers uninitialized.";
 
-		g_settings->attempt_save();
-		settings_instance.reset();
+		g_settings.attempt_save();
 		LOG(HACKER) << "Settings saved and uninitialized.";
 	}
 	catch (std::exception const& ex)

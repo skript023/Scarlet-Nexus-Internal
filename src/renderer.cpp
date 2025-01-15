@@ -39,7 +39,7 @@ namespace big
 
 	void renderer::on_present()
 	{
-		if (g_gui.m_opened && g_settings->window.mouse_active)
+		if (g_gui.m_opened && g_settings.window.mouse_active)
 		{
 			ImGui::GetIO().MouseDrawCursor = true;
 			ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -136,10 +136,10 @@ namespace big
 		m_ui_manager_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 16.f, &font_cfg);
 		merge_icon_with_latest_font(14.f, false);
 
-		g_settings->window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 18.f, &font_cfg);
+		g_settings.window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 18.f, &font_cfg);
 		merge_icon_with_latest_font(16.f, false);
 
-		g_settings->window.font_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 24.f, &font_cfg);
+		g_settings.window.font_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 24.f, &font_cfg);
 		merge_icon_with_latest_font(17.f, false);
 
 		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
@@ -202,8 +202,8 @@ namespace big
 			g_running = false;
 		}
 			
-		g_ui_manager->check_for_input();
-		g_ui_manager->handle_input();
+		g_ui_manager.check_for_input();
+		g_ui_manager.handle_input();
 
 		if (g_gui.m_opened)
 		{
@@ -291,6 +291,6 @@ namespace big
 		icons_config.PixelSnapH = true;
 		icons_config.FontDataOwnedByAtlas = FontDataOwnedByAtlas;
 
-		g_settings->window.font_icon = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_icons, sizeof(font_icons), font_size, &icons_config, icons_ranges);
+		g_settings.window.font_icon = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_icons, sizeof(font_icons), font_size, &icons_config, icons_ranges);
 	}
 }

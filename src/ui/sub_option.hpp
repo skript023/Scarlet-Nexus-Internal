@@ -27,7 +27,7 @@ namespace big
 		{
 			if (action == OptionAction::EnterPress)
 			{
-				g_ui_manager->switch_to_submenu(m_sub_id);
+				g_ui_manager.switch_to_submenu(m_sub_id);
 			}
 
 			base_option::handle_action(action);

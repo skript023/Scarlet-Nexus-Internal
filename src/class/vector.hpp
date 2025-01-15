@@ -38,7 +38,7 @@ namespace big
 		float y;
 
 		float distance(const Vector2 b) const
-		{ 
+		{
 			float x = this->x - b.x;
 			float y = this->y - b.y;
 			return sqrtf((x * x) + (y * y)) * 0.03048f;
@@ -48,6 +48,13 @@ namespace big
 		{
 			return (x * vec2.x) + (y * vec2.y);
 		}
+
+		void operator=(nlohmann::json const& data)
+		{
+			*this = data.get<Vector2>();
+		}
+
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(Vector2, x, y)
 	};
 
 	struct Vector3
@@ -77,6 +84,13 @@ namespace big
 		Vector3 operator+(const Vector3& vec3) const { return { x + vec3.x, y * vec3.y, z * vec3.z }; }
 		Vector3 operator/(const Vector3& vec3) const { return { vec3.x / x, vec3.y / y, vec3.z / z }; }
 		bool operator==(const Vector3 a) const { return x == a.x && y == a.y && z == a.z; }
+
+		void operator=(nlohmann::json const& data)
+		{
+			*this = data.get<Vector3>();
+		}
+
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(Vector3, x, y, z)
 	};
 
 	struct Rotator
@@ -97,7 +111,7 @@ namespace big
 	struct Vector4
 	{
 		Vector4() = default;
-		Vector4(float x, float y, float z, float w): x(x), y(y), z(z), w(w) {}
+		Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 		float x{};
 		float y{};
 		float z{};
@@ -113,7 +127,7 @@ namespace big
 			return float((int)x & v);
 		}
 
-		Vector4 operator&(const Vector4& v) { return {float((int)v.x & (int)x), float((int)v.y & (int)y), float((int)v.z & (int)z), float((int)v.w & (int)w) }; };
+		Vector4 operator&(const Vector4& v) { return { float((int)v.x & (int)x), float((int)v.y & (int)y), float((int)v.z & (int)z), float((int)v.w & (int)w) }; };
 	};
 
 	struct FVector_NetQuantize : public Vector3
@@ -142,7 +156,7 @@ namespace big
 		FVector_NetQuantizeNormal operator-() const { return { -x, -y, -z }; }
 	};
 
-	class FLinearColor 
+	class FLinearColor
 	{
 	public:
 		float R, G, B, A;

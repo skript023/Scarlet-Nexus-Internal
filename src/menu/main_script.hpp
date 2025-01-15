@@ -17,7 +17,7 @@ namespace big
         }
         static void render_home()
         {
-            g_ui_manager->add_submenu<regular_submenu>("Home", SubmenuHome, [](regular_submenu* sub)
+            g_ui_manager.add_submenu<regular_submenu>("Home", SubmenuHome, [](regular_submenu* sub)
             {
                 sub->add_option<sub_option>("Player", nullptr, SubmenuPlayer);
                 sub->add_option<sub_option>("Stats", nullptr, SubmenuStats);
@@ -31,7 +31,7 @@ namespace big
                 sub->add_option<sub_option>("Settings", nullptr, SubmenuSettings);
             });
 
-            g_ui_manager->add_submenu<regular_submenu>("Demo", SubmenuTest, [](regular_submenu* sub)
+            g_ui_manager.add_submenu<regular_submenu>("Demo", SubmenuTest, [](regular_submenu* sub)
             {
                 sub->add_option<reguler_option>("Option", nullptr, []
                 {

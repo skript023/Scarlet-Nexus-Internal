@@ -89,7 +89,7 @@ namespace big
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, alpha);
 
-			ImGui::PushFont(g_settings->window.font_title);
+			ImGui::PushFont(g_settings.window.font_title);
 			ImGui::TextWrapped(g_gui_service->get_selected()->name);
 			ImGui::PopFont();
 

@@ -4,6 +4,19 @@
 
 namespace big
 {
+    struct Color
+    {
+        Color(std::uint8_t r = 0, std::uint8_t g = 0, std::uint8_t b = 0, std::uint8_t a = 255) :
+            r(r), g(g), b(b), a(a)
+        {}
+
+        std::uint8_t r;
+        std::uint8_t g;
+        std::uint8_t b;
+        std::uint8_t a;
+
+        NLOHMANN_DEFINE_TYPE_INTRUSIVE(Color, r, g, b, a)
+    };
     /**
      * \brief A stream buffer that uses a char[] buffer
      */
