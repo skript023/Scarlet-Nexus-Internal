@@ -2,6 +2,7 @@
 #include "logger.hpp"
 #include "pointers.hpp"
 #include "renderer.hpp"
+#include "file_manager.hpp"
 #include "fonts/font_list.hpp"
 #include "fonts/icon_list.hpp"
 
@@ -56,7 +57,7 @@ namespace big
 
 		g_gui.dx_on_tick();
 
-		if (g_gui.m_opened)
+		if (g_ui_manager.m_opened)
 		{
 			g_gui.dx_on_opened();
 		}
@@ -105,18 +106,7 @@ namespace big
 
 	void renderer::imgui_init()
 	{
-		auto file_path = std::filesystem::path(std::getenv("appdata"));
-		file_path /= "Ellohim";
-		if (!std::filesystem::exists(file_path))
-		{
-			std::filesystem::create_directory(file_path);
-		}
-		else if (!std::filesystem::is_directory(file_path))
-		{
-			std::filesystem::remove(file_path);
-			std::filesystem::create_directory(file_path);
-		}
-		file_path /= "imgui.ini";
+		auto file_path = g_file_manager.get_project_file("./imgui.ini").get_path();
 
 		ImGuiContext* ctx = ImGui::CreateContext();
 
@@ -130,17 +120,8 @@ namespace big
 		font_cfg.FontDataOwnedByAtlas = false;
 		std::strcpy(font_cfg.Name, "Rubik");
 
-		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 14.f, &font_cfg);
+		m_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 17.f, &font_cfg);
 		merge_icon_with_latest_font(14.f, false);
-
-		m_ui_manager_font = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 16.f, &font_cfg);
-		merge_icon_with_latest_font(14.f, false);
-
-		g_settings.window.font_sub_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 18.f, &font_cfg);
-		merge_icon_with_latest_font(16.f, false);
-
-		g_settings.window.font_title = ImGui::GetIO().Fonts->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(font_rubik), sizeof(font_rubik), 24.f, &font_cfg);
-		merge_icon_with_latest_font(17.f, false);
 
 		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
 
@@ -186,7 +167,7 @@ namespace big
 		{
 			//Persist and restore the cursor position between menu instances.
 			static POINT cursor_coords{};
-			if (g_gui.m_opened)
+			if (g_ui_manager.m_opened)
 			{
 				GetCursorPos(&cursor_coords);
 			}
@@ -194,10 +175,8 @@ namespace big
 			{
 				SetCursorPos(cursor_coords.x, cursor_coords.y);
 			}
-
-			g_gui.m_opened ^= true;
 		}
-		if (msg == WM_QUIT)
+		if (msg == WM_KEYUP && wparam == VK_END)
 		{
 			g_running = false;
 		}
@@ -205,7 +184,7 @@ namespace big
 		g_ui_manager.check_for_input();
 		g_ui_manager.handle_input();
 
-		if (g_gui.m_opened)
+		if (g_ui_manager.m_opened)
 		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
 		}

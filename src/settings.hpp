@@ -92,12 +92,12 @@ namespace big
 			std::int32_t m_tabbar_switch = 200;
 
 			// Submenu bar
-			Color m_submenu_bar_background_color{ 24, 24, 24, 255 };
-			Color m_submenu_bar_text_color{ 153, 153, 155, 255 };
+			Color m_submenu_bar_background_color{ 0, 0, 0, 150 };
+			Color m_submenu_bar_text_color{ 255, 255, 255, 255 };
 
 			//Options
-			Color m_toggle_on_color{ 124, 201, 252, 255 };
-			Color m_toggle_off_color{ 46, 46, 46, 255 };
+			Color m_toggle_on_color{ 255, 255, 255, 200 };
+			Color m_toggle_off_color{ 0, 0, 0, 150 };
 			Color m_submenu_rect_color{ 255, 255, 255, 180 };
 			Color m_option_selected_text_color{ 0, 0, 0, 255 };
 			Color m_option_unselected_text_color{ 255, 255, 255, 255 };

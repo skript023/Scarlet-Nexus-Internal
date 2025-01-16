@@ -20,7 +20,11 @@ namespace big
 				sub->reset();
 				sub->execute();
 
-				draw_tabs();
+				if (!m_tabs_stack.empty())
+					draw_tabs();
+				else
+					draw_submenu_bar(sub);
+
 				if (sub->get_num_option() != 0)
 				{
 					draw_rect(
@@ -170,7 +174,10 @@ namespace big
 				if (const auto opt = sub->get_option(sub->get_selected_option()))
 					opt->handle_action(OptionAction::RightPress);
 			}
+		}
 
+		if (m_opened && !m_tabs_stack.empty())
+		{
 			static Timer tabSwitchTimer(0ms);
 			tabSwitchTimer.SetDelay(std::chrono::milliseconds(g_settings.window.m_tabbar_switch)); // Delay between switches
 
@@ -259,8 +266,7 @@ namespace big
 		float line_y = m_draw_base_y + m_submenu_bar_height;
 		draw_rect(g_settings.window.m_pos.x, line_y + 19.f, g_settings.window.m_width, 2.0f, Color(255, 255, 255, 255));
 
-		if (total_tabs > 0)
-			m_draw_base_y += m_submenu_bar_height;
+		m_draw_base_y += m_submenu_bar_height;
 	}
 
 	void ui_manager::draw_submenu_bar(abstract_submenu* sub)
@@ -278,9 +284,13 @@ namespace big
 
 		draw_rect(
 			g_settings.window.m_pos.x,
-			m_draw_base_y + (m_submenu_bar_height / 2.f),
+			m_draw_base_y + (m_submenu_bar_height / 2.f) - 5.f,
 			g_settings.window.m_width, m_submenu_bar_height,
 			g_settings.window.m_submenu_bar_background_color);
+
+		float line_y = m_draw_base_y + m_submenu_bar_height;
+		draw_rect(g_settings.window.m_pos.x, line_y + 19.f, g_settings.window.m_width, 2.0f, Color(255, 255, 255, 255));
+
 		draw_left_text(
 			&leftText[0],
 			g_settings.window.m_pos.x + m_padding.x,
@@ -307,14 +317,6 @@ namespace big
 	{
 		if (opt->get_flag(OptionFlag::BoolSliderInt))
 		{
-			/*draw_sprite(
-				g_renderer->m_toggle_gpu_handle,
-				g_settings.window.m_pos.x + m_padding.x,
-				m_draw_base_y + (m_option_height / 2.f) + (m_padding.y / 2.f),
-				32.f,
-				32.f,
-				m_bool_slider_int_option ? g_settings.window.m_toggle_on_color : g_settings.window.m_toggle_off_color);*/
-
 			draw_checkbox(
 				g_settings.window.m_pos.x + m_padding.x,
 				m_draw_base_y + (m_option_height / 2.f) + (m_padding.y / 2.f),
@@ -325,14 +327,6 @@ namespace big
 		
 		if (opt->get_flag(OptionFlag::BoolSliderFloat))
 		{
-			/*draw_sprite(
-				g_renderer->m_toggle_gpu_handle,
-				g_settings.window.m_pos.x + m_padding.x,
-				m_draw_base_y + (m_option_height / 2.f) + (m_padding.y / 2.f),
-				32.f,
-				32.f,
-				m_bool_slider_float_option ? g_settings.window.m_toggle_on_color : g_settings.window.m_toggle_off_color);*/
-
 			draw_checkbox(
 				g_settings.window.m_pos.x + m_padding.x,
 				m_draw_base_y + (m_option_height / 2.f) + (m_padding.y / 2.f),
@@ -343,14 +337,6 @@ namespace big
 
 		if (opt->get_flag(OptionFlag::Toggle))
 		{
-			/*draw_sprite(
-				g_renderer->m_toggle_gpu_handle,
-				g_settings.window.m_pos.x + m_padding.x,
-				m_draw_base_y + (m_option_height / 2.f) + (m_padding.y / 2.f),
-				32.f,
-				32.f,
-				m_bool_option ? g_settings.window.m_toggle_on_color : g_settings.window.m_toggle_off_color);*/
-
 			draw_checkbox(
 				g_settings.window.m_pos.x + m_padding.x,
 				m_draw_base_y + (m_option_height / 2.f) + (m_padding.y / 2.f),
@@ -453,10 +439,11 @@ namespace big
 			const float content_height = m_option_height * options_per_page;
 			const float scrollbar_height = (float)options_per_page / total_options * m_scrollbar_height;
 			const float scrollbar_position = (float)selected_option / total_options * content_height;
+			float default_position = m_tabs_stack.empty() ? (m_option_height * 0.5f) : (m_submenu_bar_height * 1.5f);
 
 			draw_rect(
 				g_settings.window.m_pos.x + (g_settings.window.m_width - m_submenu_rect_width) + 20.f, // X position of scrollbar
-				g_settings.window.m_pos.y + m_header_height + (m_submenu_bar_height * 1.5f) + scrollbar_position,                // Y position of scrollbar
+				g_settings.window.m_pos.y + m_header_height + default_position + scrollbar_position,                // Y position of scrollbar
 				m_submenu_rect_width,                              // Width of scrollbar
 				scrollbar_height,                                  // Height of scrollbar
 				g_settings.window.m_submenu_rect_color,                              // Color of scrollbar
