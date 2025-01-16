@@ -53,6 +53,7 @@ namespace memory
 
 		for (std::size_t i = 0; i < ida_sig.size(); ++i)
 		{
+			m_hash = m_hash.update(ida_sig[i]);
 			if (ida_sig[i] == ' ')
 				continue;
 
@@ -75,6 +76,8 @@ namespace memory
 				m_bytes.push_back(std::nullopt);
 			}
 		}
+
+		m_hash = m_hash.update(ida_sig.size());
 	}
 
 	pattern::pattern(const void *bytes, std::string_view mask)

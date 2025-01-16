@@ -1,14 +1,11 @@
 #include "common.hpp"
 #include "logger.hpp"
 #include "pointers.hpp"
-#include "memory/all.hpp"
 
 namespace big
 {
-	pointers::pointers()
+	pointers::pointers() : main_batch("pointer_cache")
 	{
-		memory::pattern_batch main_batch;
-
 		if (!this->get_swapchain())
 			LOG(WARNING) << "Failed get swapchain";
 		
@@ -69,6 +66,11 @@ namespace big
 	pointers::~pointers()
 	{
 		g_pointers = nullptr;
+	}
+
+	void pointers::update()
+	{
+		main_batch.update();
 	}
 
 	bool pointers::get_swapchain()

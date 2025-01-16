@@ -63,6 +63,8 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto hooking_instance = std::make_unique<hooking>();
 		LOG(HACKER) << "Hooking initialized.";
 
+		g_pointers->update();
+
 		auto ufunctions_instance = std::make_unique<ufunction>();
 		LOG(HACKER) << "Ufunctions initialized.";
 

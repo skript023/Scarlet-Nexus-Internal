@@ -5,6 +5,7 @@
 #include <vector>
 #include "fwddec.hpp"
 #include "handle.hpp"
+#include "pattern_hash.hpp"
 
 namespace memory
 {
@@ -19,7 +20,8 @@ namespace memory
 		inline pattern(const char* ida_sig) :
 			pattern(std::string_view(ida_sig))
 		{}
-	private:
 		std::vector<std::optional<std::uint8_t>> m_bytes;
+	private:
+		pattern_hash m_hash;
 	};
 }

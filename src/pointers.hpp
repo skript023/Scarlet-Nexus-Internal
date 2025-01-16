@@ -1,5 +1,6 @@
 #pragma once
 #include "common.hpp"
+#include "memory/all.hpp"
 #include "function_types.hpp"
 #include "class/engine_sdk.hpp"
 #include <class/vector.hpp>
@@ -9,9 +10,12 @@ namespace big
 {
 	class pointers
 	{
+		memory::pattern_batch main_batch;
 	public:
 		explicit pointers();
 		~pointers();
+
+		void update();
 	public:
 		HWND m_hwnd{};
 

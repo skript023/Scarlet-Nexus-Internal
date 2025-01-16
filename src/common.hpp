@@ -58,7 +58,7 @@
 
 #pragma comment(lib, "Xinput.lib")
 
-#define GAME "Game.exe"
+#define GAME "ScarletNexus-Win64-Shipping.exe"
 #define GAME_NAME "Scarlet Nexus"
 #define FOLDER_NAME "Scarlet Nexus Trainer"
 #define LOG_NAME "ScarletNexus.log"
