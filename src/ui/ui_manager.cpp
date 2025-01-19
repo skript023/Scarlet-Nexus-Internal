@@ -20,16 +20,13 @@ namespace big
 				sub->reset();
 				sub->execute();
 
-				if (!m_tabs_stack.empty())
-					draw_tabs();
-				else
-					draw_submenu_bar(sub);
+				if (!m_all_tabs.empty()) draw_tabs();
 
 				if (sub->get_num_option() != 0)
 				{
 					draw_rect(
 						g_settings.window.m_pos.x,
-						g_settings.window.m_pos.y + m_header_height + (m_submenu_bar_height * 1.5f),
+						g_settings.window.m_pos.y + m_header_height + (m_all_tabs.empty() ? (m_header_height * 1.5f) : (m_submenu_bar_height * 1.5f)),
 						g_settings.window.m_width,
 						m_option_height * (sub->get_num_option() > g_settings.window.m_option_per_page ? g_settings.window.m_option_per_page : sub->get_num_option()),
 						g_settings.window.m_option_unselected_background_color);
@@ -176,7 +173,7 @@ namespace big
 			}
 		}
 
-		if (m_opened && !m_tabs_stack.empty())
+		if (m_opened && !m_all_tabs.empty())
 		{
 			static Timer tabSwitchTimer(0ms);
 			tabSwitchTimer.SetDelay(std::chrono::milliseconds(g_settings.window.m_tabbar_switch)); // Delay between switches
@@ -219,7 +216,7 @@ namespace big
 		draw_sprite(
 			g_renderer->m_header,
 			g_settings.window.m_pos.x,
-			m_draw_base_y + (m_submenu_bar_height / 2.f) - 5.f,
+			m_draw_base_y + (m_submenu_bar_height / 2.f),
 			g_settings.window.m_width,
 			m_header_height,
 			m_header_background_color);
@@ -252,7 +249,7 @@ namespace big
 
 			float tab_x = (is_selected) ? current_tab_x : g_settings.window.m_pos.x + ((i - start_index) * tab_width);
 
-			draw_rect(tab_x, m_draw_base_y + (m_submenu_bar_height / 2) - 5.f, tab_width, m_submenu_bar_height,
+			draw_rect(tab_x, m_draw_base_y + (m_submenu_bar_height / 2), tab_width, m_submenu_bar_height,
 				is_selected ? g_settings.window.m_tab_selected_color : g_settings.window.m_tab_unselected_color);
 
 			draw_centered_text(
@@ -284,7 +281,7 @@ namespace big
 
 		draw_rect(
 			g_settings.window.m_pos.x,
-			m_draw_base_y + (m_submenu_bar_height / 2.f) - 5.f,
+			m_draw_base_y + (m_submenu_bar_height / 2.f),
 			g_settings.window.m_width, m_submenu_bar_height,
 			g_settings.window.m_submenu_bar_background_color);
 

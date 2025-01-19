@@ -164,7 +164,6 @@ namespace big
 				description_text_color
 			)
 		} window;
-	
 
 		NLOHMANN_DEFINE_TYPE_INTRUSIVE(settings, window, self, skill)
 	};
