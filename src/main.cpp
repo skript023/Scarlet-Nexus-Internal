@@ -69,7 +69,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(HACKER) << "Ufunctions initialized.";
 
 		auto gui_service_instance = std::make_unique<gui_service>();
-		auto notification_instance = std::make_unique<notification_service>();
 		LOG(HACKER) << "Service registered.";
 
 		auto server_instance = std::make_unique<server_module>();
@@ -102,8 +101,7 @@ DWORD APIENTRY main_thread(LPVOID)
 
 		server_instance.reset();
 		LOG(HACKER) << "Server unregistered.";
-
-		notification_instance.reset();
+		
 		gui_service_instance.reset();
 		LOG(HACKER) << "Service unregistered.";
 

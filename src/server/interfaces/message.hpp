@@ -14,6 +14,11 @@ namespace big
             return *this;
         }
 
+        std::string to_json_string()
+        {
+            return nlohmann::json(*this).dump();
+        }
+
         void operator=(nlohmann::json const& data)
         {
             *this = data.get<Message>();

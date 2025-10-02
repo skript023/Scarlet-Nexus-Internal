@@ -97,7 +97,7 @@ namespace big
 
 	void gui::script_init()
 	{
-		g_notification_service->success("Welcome", "Scarlet Nexus Trainer Successfully Injected. Press insert to open");
+		notification::success("Welcome", "Scarlet Nexus Trainer Successfully Injected. Press insert to open");
 		main_script::initialize_main();
 	}
 
