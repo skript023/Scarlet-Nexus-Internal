@@ -6,6 +6,8 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include <D3D11.h>
+#include <D3D12.h>
+#include <dxgi1_4.h>
 #include <wrl/client.h>
 
 #include <cinttypes>

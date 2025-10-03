@@ -1,6 +1,6 @@
 #pragma once
 #include "base_option.hpp"
-#include "ui_manager.hpp"
+#include "canvas.hpp"
 
 namespace big
 {
@@ -37,7 +37,7 @@ namespace big
 		{
 			if (flag == OptionFlag::Toggle)
 			{
-				g_ui_manager.m_bool_option = *m_bool;
+				canvas::set_bool_option(m_bool);
 				return true;
 			}
 

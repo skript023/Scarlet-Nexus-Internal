@@ -1,7 +1,7 @@
 #include "common.hpp"
 #include "function_types.hpp"
 #include "logger.hpp"
-#include "gui.hpp"
+#include "ui/canvas.hpp"
 #include "hooking.hpp"
 #include "memory/module.hpp"
 #include "pointers.hpp"
@@ -85,7 +85,7 @@ namespace big
 
 	BOOL hooks::set_cursor_pos(int x, int y)
 	{
-		if (g_gui.m_opened)
+		if (canvas::is_opened())
 			return true;
 
 		return g_hooking->m_set_cursor_pos_hook.get_original<decltype(&set_cursor_pos)>()(x, y);

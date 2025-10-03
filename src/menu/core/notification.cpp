@@ -1,5 +1,5 @@
+#include "../view.hpp"
 #include "pointers.hpp"
-#include "notification.h"
 #include "services/notification/notification_service.hpp"
 
 namespace big
@@ -55,7 +55,7 @@ namespace big
 		return start_pos + 45.f + total_size;
 	}
 
-	void draw::notifications()
+	void view::notifications()
 	{
 		ImDrawList* draw_list = ImGui::GetBackgroundDrawList();
 

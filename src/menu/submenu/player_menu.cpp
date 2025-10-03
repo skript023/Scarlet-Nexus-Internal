@@ -1,93 +1,15 @@
-#include "imgui.h"
+#include "../view.hpp"
 #include "script.hpp"
-#include "submenu.hpp"
 #include "settings.hpp"
-#include "player_menu.h"
 #include "ufunction.hpp"
 #include "utility/player.hpp"
 #include "SDK/BattlePrototype_classes.hpp"
 
 namespace big
 {
-    void player_menu::add_value()
+    void view::player_submenu()
     {
-        
-    }
-
-	void player_menu::render_menu()
-	{
-        add_value();
-        auto end = std::chrono::system_clock::now();
-        std::time_t date = std::chrono::system_clock::to_time_t(end);
-
-        ImGui::Text("%s", std::ctime(&date));
-
-        ImGui::BeginGroup();
-
-        ImGui::Checkbox("Infinite Psychic Gauge", &g_settings.self.infinite_psychic);
-        ImGui::Checkbox("SAS No Cooldown", &g_settings.self.no_sas_cooldown);
-        ImGui::Checkbox("Infinite SAS Duration", &g_settings.self.infinite_sas_duration);
-
-        ImGui::EndGroup();
-
-        ImGui::SameLine(240.f);
-
-        ImGui::BeginGroup();
-
-        ImGui::Checkbox("No Item Use Cooldown", &g_settings.self.no_items_cooldown);
-        ImGui::Checkbox("Infinite Battle Point", &g_settings.self.infinite_battle_point);
-        ImGui::Checkbox("Infinite Credits", &g_settings.self.infinite_credits);
-
-        ImGui::EndGroup();
-
-        ImGui::SameLine(480.f);
-
-        ImGui::BeginGroup();
-
-        ImGui::Checkbox("Infinite Brain Drive", &g_settings.self.infinite_brain_dive);
-        ImGui::Checkbox("Instant Brain Field", &g_settings.self.instant_brain_field);
-        ImGui::Checkbox("Infinite Health", &g_settings.self.infinite_health);
-
-        ImGui::EndGroup();
-
-        if (ImGui::Button("Enter Brain Drive"))
-        {
-            player::enter_brain_drive();
-        }
-
-        ImGui::PushItemWidth(200.f);
-
-        ImGui::SliderFloat("EXP Multiplier", player::player_exp_multiplier(), 1.0f, 1000.f);
-
-        if (ImGui::Combo("Skill Slot 1", &g_settings.skill.slot_1, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(1, g_settings.skill.slot_1);
-
-        if (ImGui::Combo("Skill Slot 2", &g_settings.skill.slot_2, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(2, g_settings.skill.slot_2);
-
-        if (ImGui::Combo("Skill Slot 3", &g_settings.skill.slot_3, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(3, g_settings.skill.slot_3);
-
-        if (ImGui::Combo("Skill Slot 4", &g_settings.skill.slot_4, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(4, g_settings.skill.slot_4);
-
-        if (ImGui::Combo("Skill Slot 5", &g_settings.skill.slot_5, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(5, g_settings.skill.slot_5);
-
-        if (ImGui::Combo("Skill Slot 6", &g_settings.skill.slot_6, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(6, g_settings.skill.slot_6);
-
-        if (ImGui::Combo("Skill Slot 7", &g_settings.skill.slot_7, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(7, g_settings.skill.slot_7);
-
-        if (ImGui::Combo("Skill Slot 8", &g_settings.skill.slot_8, skill_list, IM_ARRAYSIZE(skill_list)))
-            player::modify_player_skill(8, g_settings.skill.slot_8);
-
-        ImGui::PopItemWidth();
-	}
-    void player_menu::render_submenu()
-    {
-        g_ui_manager.add_submenu<regular_submenu>("Player", SubmenuPlayer, [](regular_submenu* sub)
+        canvas::add_submenu<regular_submenu>("Player", SubmenuPlayer, [](regular_submenu* sub)
         {
             sub->add_option<reguler_option>("Enter Brain Dive", nullptr, []
             {

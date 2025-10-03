@@ -1,6 +1,6 @@
 #pragma once
 #include "base_option.hpp"
-#include "ui_manager.hpp"
+#include "canvas.hpp"
 
 namespace big
 {
@@ -27,7 +27,7 @@ namespace big
 		{
 			if (action == OptionAction::EnterPress)
 			{
-				g_ui_manager.switch_to_submenu(m_sub_id);
+				canvas::switch_to_submenu(m_sub_id);
 			}
 
 			base_option::handle_action(action);

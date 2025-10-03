@@ -11,11 +11,9 @@
 #include "fiber_pool.hpp"
 #include "file_manager.hpp"
 
-#include "ui/ui_manager.hpp"
 #include "server/server_module.hpp"
 #include "event_loop/backend_events.hpp"
 
-#include "services/gui/gui_service.hpp"
 #include "services/notification/notification_service.hpp"
 
 DWORD APIENTRY main_thread(LPVOID)
@@ -51,7 +49,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		LOG(HACKER) << "Pointers initialized.";
 
 		auto renderer_instance = std::make_unique<renderer>();
-		auto ui_instance = std::make_unique<ui_manager>();
 		LOG(HACKER) << "Renderer initialized.";
 
 		auto fiber_pool_instance = std::make_unique<fiber_pool>(10);
@@ -68,13 +65,11 @@ DWORD APIENTRY main_thread(LPVOID)
 		auto ufunctions_instance = std::make_unique<ufunction>();
 		LOG(HACKER) << "Ufunctions initialized.";
 
-		auto gui_service_instance = std::make_unique<gui_service>();
 		LOG(HACKER) << "Service registered.";
 
 		auto server_instance = std::make_unique<server_module>();
 		LOG(HACKER) << "Server initialized.";
 
-		g_script_mgr.add_script(std::make_unique<script>(&gui::script_func));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::player_skill_event));
 		g_script_mgr.add_script(std::make_unique<script>(&backend_events::script_func));
 		LOG(HACKER) << "Scripts registered.";
@@ -102,7 +97,6 @@ DWORD APIENTRY main_thread(LPVOID)
 		server_instance.reset();
 		LOG(HACKER) << "Server unregistered.";
 		
-		gui_service_instance.reset();
 		LOG(HACKER) << "Service unregistered.";
 
 		hooking_instance.reset();

@@ -1,29 +1,14 @@
-#include "imgui.h"
+#include "../view.hpp"
 #include "script.hpp"
-#include "submenu.hpp"
 #include "settings.hpp"
-#include "setting_menu.h"
 #include "utility/player.hpp"
 #include "server/server_module.hpp"
 
 namespace big
 {
-    void setting_menu::render_menu()
+    void view::setting_submenu()
     {
-        if (ImGui::Button("Quit"))
-        {
-            g_running = false;
-        }
-
-        if (ImGui::Button("Test Socket"))
-        {
-            g_server_module->get_alpha()->find();
-        }
-    }
-
-    void setting_menu::render_submenu()
-    {
-        g_ui_manager.add_submenu<regular_submenu>("Settings", SubmenuSettings, [](regular_submenu* sub)
+        canvas::add_submenu<regular_submenu>("Settings", SubmenuSettings, [](regular_submenu* sub)
         {
             sub->add_option<sub_option>("Infobar", nullptr, SubmenuSettingsSubmenuBar);
             sub->add_option<sub_option>("Options", nullptr, SubmenuSettingsOption);
@@ -38,7 +23,7 @@ namespace big
             sub->add_option<reguler_option>("Exit", nullptr, [] { exit(0); });
         });
 
-        g_ui_manager.add_submenu<regular_submenu>("Infobar", SubmenuSettingsSubmenuBar, [](regular_submenu* sub)
+        canvas::add_submenu<regular_submenu>("Infobar", SubmenuSettingsSubmenuBar, [](regular_submenu* sub)
         {
             sub->add_option<number_option<std::uint8_t>>("Background R", nullptr, &g_settings.window.m_submenu_bar_background_color.r, '\0', static_cast<std::uint8_t>(255));
             sub->add_option<number_option<std::uint8_t>>("Background G", nullptr, &g_settings.window.m_submenu_bar_background_color.g, '\0', static_cast<std::uint8_t>(255));
@@ -50,7 +35,7 @@ namespace big
             sub->add_option<number_option<std::uint8_t>>("Text A", nullptr, &g_settings.window.m_submenu_bar_text_color.a, '\0', static_cast<std::uint8_t>(255));
         });
 
-        g_ui_manager.add_submenu<regular_submenu>("Options", SubmenuSettingsOption, [](regular_submenu* sub)
+        canvas::add_submenu<regular_submenu>("Options", SubmenuSettingsOption, [](regular_submenu* sub)
         {
             sub->add_option<number_option<std::uint8_t>>("Selected Background R", nullptr, &g_settings.window.m_option_selected_background_color.r, '\0', static_cast<std::uint8_t>(255));
             sub->add_option<number_option<std::uint8_t>>("Selected Background G", nullptr, &g_settings.window.m_option_selected_background_color.g, '\0', static_cast<std::uint8_t>(255));
@@ -71,7 +56,7 @@ namespace big
             sub->add_option<number_option<std::uint8_t>>("Unselected Text A", nullptr, &g_settings.window.m_option_unselected_text_color.a, '\0', static_cast<std::uint8_t>(255));
         });
 
-        g_ui_manager.add_submenu<regular_submenu>("Footer", SubmenuSettingsFooter, [](regular_submenu* sub)
+        canvas::add_submenu<regular_submenu>("Footer", SubmenuSettingsFooter, [](regular_submenu* sub)
         {
             sub->add_option<number_option<std::uint8_t>>("Background R", nullptr, &g_settings.window.m_footer_background_color.r, '\0', static_cast<std::uint8_t>(255));
             sub->add_option<number_option<std::uint8_t>>("Background G", nullptr, &g_settings.window.m_footer_background_color.g, '\0', static_cast<std::uint8_t>(255));
@@ -79,7 +64,7 @@ namespace big
             sub->add_option<number_option<std::uint8_t>>("Background A", nullptr, &g_settings.window.m_footer_background_color.a, '\0', static_cast<std::uint8_t>(255));
         });
 
-        g_ui_manager.add_submenu<regular_submenu>("Input", SubmenuSettingsInput, [](regular_submenu* sub)
+        canvas::add_submenu<regular_submenu>("Input", SubmenuSettingsInput, [](regular_submenu* sub)
         {
             sub->add_option<number_option<std::int32_t>>("Open Delay", nullptr, &g_settings.window.m_open_delay, 10, 1000, 10, 0);
             sub->add_option<number_option<std::int32_t>>("Back Delay", nullptr, &g_settings.window.m_back_delay, 10, 1000, 10, 0);
@@ -87,14 +72,5 @@ namespace big
             sub->add_option<number_option<std::int32_t>>("Vertical Delay", nullptr, &g_settings.window.m_vectical_delay, 10, 1000, 10, 0);
             sub->add_option<number_option<std::int32_t>>("Horizontal Delay", nullptr, &g_settings.window.m_horizontal_delay, 10, 1000, 10, 0);
         });
-    }
-
-    void setting_menu::gui_settings()
-    {
-        static ImVec4 col_gui = ImGui::ColorConvertU32ToFloat4(g_settings.window.color);
-        if (ImGui::ColorEdit4("Gui Color##gui_picker", (float*)&col_gui, ImGuiColorEditFlags_InputRGB | ImGuiColorEditFlags_NoSidePreview))
-        {
-            g_settings.window.color = ImGui::ColorConvertFloat4ToU32(col_gui);
-        }
     }
 }

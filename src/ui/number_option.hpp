@@ -1,6 +1,6 @@
 #pragma once
 #include "base_option.hpp"
-#include "ui_manager.hpp"
+#include "canvas.hpp"
 #include "utility/utility.hpp"
 
 namespace big

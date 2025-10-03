@@ -1,6 +1,6 @@
 #pragma once
 #include "base_option.hpp"
-#include "ui_manager.hpp"
+#include "canvas.hpp"
 
 namespace big
 {
@@ -77,7 +77,7 @@ namespace big
 		{
 			if (flag == OptionFlag::BoolSliderFloat)
 			{
-				g_ui_manager.m_bool_slider_float_option = *m_bool;
+				canvas::set_bool_slider_float(m_bool);
 
 				return true;
 			}

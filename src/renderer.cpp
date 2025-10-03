@@ -11,10 +11,7 @@
 #include <backends/imgui_impl_win32.h>
 #include <imgui_internal.h>
 
-#include "ui/ui_manager.hpp"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "ui/canvas.hpp"
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //CW.exe+2D4E21610
@@ -22,6 +19,8 @@ namespace big
 {
 	renderer::renderer()
 	{
+		g_gui.init();
+
 		g_renderer = this;
 	}
 
@@ -40,7 +39,7 @@ namespace big
 
 	void renderer::on_present()
 	{
-		if (g_gui.m_opened && g_settings.window.mouse_active)
+		if (g_settings.window.mouse_active)
 		{
 			ImGui::GetIO().MouseDrawCursor = true;
 			ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
@@ -55,12 +54,8 @@ namespace big
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		g_gui.dx_on_tick();
-
-		if (g_ui_manager.m_opened)
-		{
-			g_gui.dx_on_opened();
-		}
+		for (const auto& cb : g_gui.m_dx_callbacks | std::views::values)
+			cb();
 
 		ImGui::Render();
 		m_d3d_context->OMSetRenderTargets(1, &m_d3d_render_target, NULL);
@@ -125,13 +120,15 @@ namespace big
 
 		m_monospace_font = ImGui::GetIO().Fonts->AddFontDefault();
 
+		load_texture(m_d3d_device);
+
 		g_gui.dx_init();
 
-		if (!LoadTextureFromFile(std::format("{}\\Scarlet Nexus Trainer\\Textures\\Header.png", std::getenv("appdata")).c_str(), m_d3d_device, &m_header, &m_header_size.x, &m_header_size.y))
+		/*if (!LoadTextureFromFile(std::format("{}\\Scarlet Nexus Trainer\\Textures\\Header.png", std::getenv("appdata")).c_str(), m_d3d_device, &m_header, &m_header_size.x, &m_header_size.y))
 			LOG(WARNING) << "Unable to load image header";
 
 		if (!LoadTextureFromFile(std::format("{}\\Scarlet Nexus Trainer\\Textures\\Toggle.png", std::getenv("appdata")).c_str(), m_d3d_device, &m_toggle, &m_toggle_size.x, &m_toggle_size.y))
-			LOG(WARNING) << "Unable to load image toggle";
+			LOG(WARNING) << "Unable to load image toggle";*/
 	}
 
 	void renderer::pre_reset()
@@ -167,7 +164,7 @@ namespace big
 		{
 			//Persist and restore the cursor position between menu instances.
 			static POINT cursor_coords{};
-			if (g_ui_manager.m_opened)
+			if (canvas::is_opened())
 			{
 				GetCursorPos(&cursor_coords);
 			}
@@ -181,85 +178,85 @@ namespace big
 			g_running = false;
 		}
 			
-		g_ui_manager.check_for_input();
-		g_ui_manager.handle_input();
+		canvas::check_for_input();
+		canvas::handle_input();
 
-		if (g_ui_manager.m_opened)
+		if (canvas::is_opened())
 		{
 			ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam);
 		}
 	}
 
-    bool renderer::LoadTextureFromFile(const char *filename, ID3D11Device *d3dDevice, ID3D11ShaderResourceView **out_srv, int *out_width, int *out_height)
-    {
-        // Load from disk into a raw RGBA buffer
-		LOG(INFO) << "Loading texture from " << filename;
+  //  bool renderer::LoadTextureFromFile(const char *filename, ID3D11Device *d3dDevice, ID3D11ShaderResourceView **out_srv, int *out_width, int *out_height)
+  //  {
+  //      // Load from disk into a raw RGBA buffer
+		//LOG(INFO) << "Loading texture from " << filename;
 
-		int image_width = 0;
-		int image_height = 0;
-		unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
-		if (image_data == NULL) 
-		{
-			LOG(WARNING) << "Failed to load image: " << stbi_failure_reason();
+		//int image_width = 0;
+		//int image_height = 0;
+		//unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+		//if (image_data == NULL) 
+		//{
+		//	LOG(WARNING) << "Failed to load image: " << stbi_failure_reason();
 
-			return false;
-		}
+		//	return false;
+		//}
 
-		// Create texture
-		D3D11_TEXTURE2D_DESC desc;
-		ZeroMemory(&desc, sizeof(desc));
-		desc.Width = image_width;
-		desc.Height = image_height;
-		desc.MipLevels = 1;
-		desc.ArraySize = 1;
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		desc.SampleDesc.Count = 1;
-		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		desc.CPUAccessFlags = 0;
+		//// Create texture
+		//D3D11_TEXTURE2D_DESC desc;
+		//ZeroMemory(&desc, sizeof(desc));
+		//desc.Width = image_width;
+		//desc.Height = image_height;
+		//desc.MipLevels = 1;
+		//desc.ArraySize = 1;
+		//desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		//desc.SampleDesc.Count = 1;
+		//desc.Usage = D3D11_USAGE_DEFAULT;
+		//desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		//desc.CPUAccessFlags = 0;
 
-		ID3D11Texture2D* pTexture = nullptr;
-		D3D11_SUBRESOURCE_DATA subResource;
-		subResource.pSysMem = image_data;
-		subResource.SysMemPitch = desc.Width * 4; // Assuming 4 bytes per pixel
-		subResource.SysMemSlicePitch = 0;
+		//ID3D11Texture2D* pTexture = nullptr;
+		//D3D11_SUBRESOURCE_DATA subResource;
+		//subResource.pSysMem = image_data;
+		//subResource.SysMemPitch = desc.Width * 4; // Assuming 4 bytes per pixel
+		//subResource.SysMemSlicePitch = 0;
 
-		HRESULT hr = d3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
-		if (FAILED(hr)) 
-		{
-			LOG(WARNING) << "Failed to create texture. HRESULT: " << hr;
-			stbi_image_free(image_data); // Free image data on failure
+		//HRESULT hr = d3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+		//if (FAILED(hr)) 
+		//{
+		//	LOG(WARNING) << "Failed to create texture. HRESULT: " << hr;
+		//	stbi_image_free(image_data); // Free image data on failure
 
-			return false;
-		}
+		//	return false;
+		//}
 
-		// Create texture view
-		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-		ZeroMemory(&srvDesc, sizeof(srvDesc));
-		srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = desc.MipLevels;
-		srvDesc.Texture2D.MostDetailedMip = 0;
+		//// Create texture view
+		//D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+		//ZeroMemory(&srvDesc, sizeof(srvDesc));
+		//srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		//srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		//srvDesc.Texture2D.MipLevels = desc.MipLevels;
+		//srvDesc.Texture2D.MostDetailedMip = 0;
 
-		hr = d3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
-		if (FAILED(hr)) 
-		{
-			LOG(WARNING) << "Failed to create shader resource view. HRESULT: " << hr;
-			pTexture->Release(); // Release texture on failure
-			stbi_image_free(image_data); // Free image data
-			
-			return false;
-		}
+		//hr = d3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+		//if (FAILED(hr)) 
+		//{
+		//	LOG(WARNING) << "Failed to create shader resource view. HRESULT: " << hr;
+		//	pTexture->Release(); // Release texture on failure
+		//	stbi_image_free(image_data); // Free image data
+		//	
+		//	return false;
+		//}
 
-		pTexture->Release();
-		*out_width = image_width;
-		*out_height = image_height;
-		stbi_image_free(image_data); // Free the image data after usage
+		//pTexture->Release();
+		//*out_width = image_width;
+		//*out_height = image_height;
+		//stbi_image_free(image_data); // Free the image data after usage
 
-		LOG(INFO) << "Loaded texture " << filename << " with dimensions: " << image_width << "x" << image_height;
+		//LOG(INFO) << "Loaded texture " << filename << " with dimensions: " << image_width << "x" << image_height;
 
-		return true;
-    }
+		//return true;
+  //  }
 
     void renderer::merge_icon_with_latest_font(float font_size, bool FontDataOwnedByAtlas)
 	{
@@ -271,5 +268,13 @@ namespace big
 		icons_config.FontDataOwnedByAtlas = FontDataOwnedByAtlas;
 
 		g_settings.window.font_icon = ImGui::GetIO().Fonts->AddFontFromMemoryTTF((void*)font_icons, sizeof(font_icons), font_size, &icons_config, icons_ranges);
+	}
+
+	void renderer::load_texture(ID3D11Device* device)
+	{
+		for (auto& callback : g_gui.m_texture_callbacks)
+		{
+			callback(device);
+		}
 	}
 }
