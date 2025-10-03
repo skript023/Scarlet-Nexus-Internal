@@ -61,14 +61,14 @@ namespace big
 				LOG(WARNING) << "Unable to load image header";
 			else
 				LOG(INFO) << "Texture Loaded " << m_header;
-			});
+		});
 
 		this->add_texture([this](ID3D11Device* device) {
 			if (!load_from_memory(toggle_texture, _ARRAYSIZE(toggle_texture), device, &m_toggle, &m_toggle_size.x, &m_toggle_size.y))
 				LOG(WARNING) << "Unable to load image toggle";
 			else
 				LOG(INFO) << "Texture Loaded " << m_toggle;
-			});
+		});
 
 		view::register_submenu();
 		LOG(INFO) << "DirectX Callback Registered.";

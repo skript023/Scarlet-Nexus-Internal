@@ -27,7 +27,7 @@ namespace big
 				{
 					draw_rect(
 						g_settings.window.m_pos.x,
-						g_settings.window.m_pos.y + m_header_height + (m_all_tabs.empty() ? (m_header_height * 1.5f) : (m_submenu_bar_height * 1.5f)),
+						g_settings.window.m_pos.y + (m_all_tabs.empty() ? (m_header_height * 1.25f) : (m_header_height + (m_submenu_bar_height * 1.5f))),
 						g_settings.window.m_width,
 						m_option_height * (sub->get_num_option() > g_settings.window.m_option_per_page ? g_settings.window.m_option_per_page : sub->get_num_option()),
 						g_settings.window.m_option_unselected_background_color);
