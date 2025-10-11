@@ -144,14 +144,14 @@ namespace big
 		return true;
 	}
 
-	void gui::add_wndproc_callback(wndproc_callback callback)
+	void gui::add_wndproc_callback(wndproc_callback&& callback)
 	{
-		m_wndproc_callbacks.emplace_back(callback);
+		m_wndproc_callbacks.emplace_back(std::move(callback));
 	}
 
-	void gui::add_texture(texture_callbacks callback)
+	void gui::add_texture(texture_callbacks&& callback)
 	{
-		m_texture_callbacks.emplace_back(callback);
+		m_texture_callbacks.emplace_back(std::move(callback));
 	}
 
 	void gui::dx_on_opened()
