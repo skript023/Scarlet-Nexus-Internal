@@ -1,7 +1,7 @@
 #include "commands.hpp"
 #include "command.hpp"
 #include "looped_command.hpp"
-#include "process_event/process_event.hpp"
+//#include "process_event/process_event.hpp"
 
 namespace big
 {
@@ -25,10 +25,10 @@ namespace big
 		m_looped_commands.push_back(command);
 	}
 
-	void commands::add_process_event_command_impl(process_event* command)
+	/*void commands::add_process_event_command_impl(process_event* command)
 	{
 		m_process_event_commands.insert({ command->get_hash(), command });
-	}
+	}*/
 
 	void commands::enable_bool_commands_impl()
 	{

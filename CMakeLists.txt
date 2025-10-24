@@ -4,6 +4,8 @@ project(ScarletNexus CXX)
 
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 set(OPENSSL_ROOT_DIR "${PROJECT_SOURCE_DIR}/openssl")
 set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")   # opsional
 set(OPENSSL_LIBRARIES "${OPENSSL_ROOT_DIR}/lib")         # opsional

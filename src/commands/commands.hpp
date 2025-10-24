@@ -35,10 +35,10 @@ namespace big
 			get_instance().add_looped_command_impl(command);
 		}
 		
-		static void add_process_event_command(process_event* command)
+		/*static void add_process_event_command(process_event* command)
 		{
 			get_instance().add_process_event_command_impl(command);
-		}
+		}*/
 
 		static void run_looped_command()
 		{
@@ -85,7 +85,7 @@ namespace big
 		void add_command_impl(command* command);
 		void add_bool_command_impl(bool_command* command);
 		void add_looped_command_impl(looped_command* command);
-		void add_process_event_command_impl(process_event* command);
+		//void add_process_event_command_impl(process_event* command);
 		void enable_bool_commands_impl();
 		void run_looped_commands_impl();
 		command* get_command_impl(joaat_t hash);

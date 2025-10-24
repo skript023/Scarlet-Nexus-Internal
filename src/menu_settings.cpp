@@ -1,9 +1,9 @@
-#include "settings.hpp"
+#include "menu_settings.hpp"
 #include "nlohmann/json.hpp"
 
 namespace big
 {
-    void settings::attempt_save()
+    void menu_settings::attempt_save()
     {
         nlohmann::json j = *this;
 
@@ -11,7 +11,7 @@ namespace big
             this->save();
     }
 
-    bool settings::load()
+    bool menu_settings::load()
     {
         this->default_options = *this;
 
@@ -52,7 +52,7 @@ namespace big
 
         return true;
     }
-    bool settings::deep_compare(nlohmann::json &current_settings, const nlohmann::json &default_settings, bool compare_value)
+    bool menu_settings::deep_compare(nlohmann::json &current_settings, const nlohmann::json &default_settings, bool compare_value)
     {
         bool should_save = false;
 
@@ -87,7 +87,7 @@ namespace big
 
         return should_save;
     }
-    bool settings::save()
+    bool menu_settings::save()
     {
         std::string settings_file = std::getenv("appdata");
         settings_file += this->settings_location;
@@ -99,7 +99,7 @@ namespace big
 
         return true;
     }
-    bool settings::write_default_config()
+    bool menu_settings::write_default_config()
     {
         std::string settings_file = std::getenv("appdata");
         settings_file += this->settings_location;

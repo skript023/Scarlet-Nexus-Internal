@@ -41,6 +41,8 @@ namespace big
 
 	const LEVELS INFO_TO_FILE{ INFO.value | FLAG_NO_CONSOLE, {"INFO"} },
 		HACKER{ INFO.value, {"HACKER"} },
+		INFO{ INFO.value, {"INFO"} },
+		VERBOSE{ DEBUG.value, {"DEBUG"} },
 		EVENT{ kEventValue | FLAG_NO_CONSOLE, {"EVENT"} },
 		RAW_GREEN_TO_CONSOLE{ kRawValue | FLAG_NO_DISK, {"RAW_GREEN_TO_CONSOLE"} },
 		RAW_RED{ kRawValue, {"RAW_RED"} };

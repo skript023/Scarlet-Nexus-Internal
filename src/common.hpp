@@ -55,7 +55,7 @@
 
 #include <nlohmann/json.hpp>
 
-#include "settings.hpp"
+#include "menu_settings.hpp"
 #include "logger.hpp"
 
 #pragma comment(lib, "Xinput.lib")

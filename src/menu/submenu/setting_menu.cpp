@@ -1,6 +1,5 @@
 #include "../view.hpp"
 #include "script.hpp"
-#include "settings.hpp"
 #include "utility/player.hpp"
 #include "server/server_module.hpp"
 

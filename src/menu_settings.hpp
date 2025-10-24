@@ -7,7 +7,8 @@
 
 namespace big
 {
-	class settings {
+	class menu_settings 
+	{
 		nlohmann::json default_options;
 		nlohmann::json options;
 	public:
@@ -15,7 +16,7 @@ namespace big
 
 		bool load();
 	private:
-		const char* settings_location = "\\Scarlet Nexus Trainer\\settings.json";
+		const char* settings_location = "\\Scarlet Nexus Trainer\\menu_settings.json";
 
 		bool deep_compare(nlohmann::json& current_settings, const nlohmann::json& default_settings, bool compare_value = false);
 		bool save();
@@ -166,8 +167,8 @@ namespace big
 			)
 		} window;
 
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE(settings, window, self, skill)
+		NLOHMANN_DEFINE_TYPE_INTRUSIVE(menu_settings, window, self, skill)
 	};
 
-	inline settings g_settings{};
+	inline menu_settings g_settings{};
 }

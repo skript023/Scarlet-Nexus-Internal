@@ -1,7 +1,6 @@
 #include "imgui.h"
 #include "script.hpp"
 #include "../view.hpp"
-#include "settings.hpp"
 #include "utility/player.hpp"
 
 namespace big

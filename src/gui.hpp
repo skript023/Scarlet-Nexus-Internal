@@ -35,8 +35,8 @@ namespace big
 		 *
 		 * @param callback Function
 		 */
-		void add_wndproc_callback(wndproc_callback callback);
-		void add_texture(texture_callbacks callback);
+		void add_wndproc_callback(wndproc_callback&& callback);
+		void add_texture(texture_callbacks&& callback);
 
 		void dx_on_opened();
 

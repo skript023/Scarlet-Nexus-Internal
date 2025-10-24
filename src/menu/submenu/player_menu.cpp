@@ -1,6 +1,5 @@
 #include "../view.hpp"
 #include "script.hpp"
-#include "settings.hpp"
 #include "ufunction.hpp"
 #include "utility/player.hpp"
 #include "SDK/BattlePrototype_classes.hpp"
