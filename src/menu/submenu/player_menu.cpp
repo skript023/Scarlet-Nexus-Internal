@@ -8,7 +8,7 @@ namespace big
 {
     void view::player_submenu()
     {
-        canvas::add_submenu<regular_submenu>("Player", SubmenuPlayer, [](regular_submenu* sub)
+        canvas::add_tab<regular_submenu>("Player", SubmenuPlayer, [](regular_submenu* sub)
         {
             sub->add_option<reguler_option>("Enter Brain Dive", nullptr, []
             {

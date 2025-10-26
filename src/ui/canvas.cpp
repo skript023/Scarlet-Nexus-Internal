@@ -1,4 +1,4 @@
-#include "canvas.hpp"
+﻿#include "canvas.hpp"
 #include "renderer.hpp"
 #include "pointers.hpp"
 #include "fonts/icon_list.hpp"
@@ -219,6 +219,12 @@ namespace big
 			m_header_height,
 			m_header_background_color);
 
+		if (m_all_tabs.empty())
+		{
+			float line_y = m_draw_base_y + m_header_height;
+			draw_rect(g_settings.window.m_pos.x, line_y + 19.f, g_settings.window.m_width, 2.0f, Color(255, 255, 255, 255));
+		}
+
 		m_draw_base_y += m_header_height;
 	}
 
@@ -226,26 +232,52 @@ namespace big
 	{
 		int max_visible_tabs = 3;
 		size_t total_tabs = m_all_tabs.size();
+		if (total_tabs == 0)
+			return;
 
 		float tab_width = g_settings.window.m_width / max_visible_tabs;
 
-		size_t start_index = (m_selected_tab > 0) ? m_selected_tab - 1 : 0;
-		size_t end_index = std::min(start_index + max_visible_tabs, total_tabs);
+		// --- Scroll window logic ---
+		static size_t start_index = 0;
 
-		if (m_selected_tab == total_tabs - 1 && total_tabs > max_visible_tabs)
+		// Jika tab aktif melewati batas kanan dari window saat ini → geser ke next group
+		if (m_selected_tab >= start_index + max_visible_tabs)
 		{
-			start_index = total_tabs - max_visible_tabs;
+			// Masih ada tab berikutnya? geser ke depan
+			if (m_selected_tab < total_tabs)
+				start_index += max_visible_tabs;
+
+			// Jangan keluar dari total tab
+			if (start_index + max_visible_tabs > total_tabs)
+				start_index = total_tabs > max_visible_tabs ? total_tabs - max_visible_tabs : 0;
+		}
+		// Jika tab aktif melewati batas kiri (misal balik ke tab sebelumnya)
+		else if (m_selected_tab < start_index)
+		{
+			// Geser ke group sebelumnya
+			if (start_index >= max_visible_tabs)
+				start_index -= max_visible_tabs;
+			else
+				start_index = 0;
 		}
 
-		static float current_tab_x = 0.0f;
-		float target_tab_x = g_settings.window.m_pos.x + ((m_selected_tab - start_index) * tab_width);
-		current_tab_x = lerp(current_tab_x, target_tab_x, 0.1f);
+		size_t end_index = std::min(start_index + max_visible_tabs, total_tabs);
 
+		// --- Animasi tab aktif ---
+		static float animated_tab_index = 0.0f;
+		float target_index = static_cast<float>(m_selected_tab);
+		animated_tab_index = lerp(animated_tab_index, target_index, 0.05f);
+
+		float anim_offset_x = (animated_tab_index - static_cast<float>(start_index)) * tab_width;
+
+		// --- Gambar tab ---
 		for (size_t i = start_index; i < end_index; ++i)
 		{
 			bool is_selected = (i == m_selected_tab);
+			float tab_x = g_settings.window.m_pos.x + ((i - start_index) * tab_width);
 
-			float tab_x = (is_selected) ? current_tab_x : g_settings.window.m_pos.x + ((i - start_index) * tab_width);
+			if (is_selected)
+				tab_x = g_settings.window.m_pos.x + anim_offset_x;
 
 			draw_rect(tab_x, m_draw_base_y + (m_submenu_bar_height / 2) - 5.f, tab_width, m_submenu_bar_height,
 				is_selected ? g_settings.window.m_tab_selected_color : g_settings.window.m_tab_unselected_color);

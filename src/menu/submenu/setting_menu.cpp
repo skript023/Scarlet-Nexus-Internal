@@ -7,7 +7,7 @@ namespace big
 {
     void view::setting_submenu()
     {
-        canvas::add_submenu<regular_submenu>("Settings", SubmenuSettings, [](regular_submenu* sub)
+        canvas::add_tab<regular_submenu>("Settings", SubmenuSettings, [](regular_submenu* sub)
         {
             sub->add_option<sub_option>("Infobar", nullptr, SubmenuSettingsSubmenuBar);
             sub->add_option<sub_option>("Options", nullptr, SubmenuSettingsOption);

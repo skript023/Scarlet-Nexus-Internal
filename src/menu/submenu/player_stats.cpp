@@ -7,7 +7,7 @@ namespace big
 {
     void view::stats_submenu()
     {
-        canvas::add_submenu<regular_submenu>("Stats", SubmenuStats, [](regular_submenu* sub)
+        canvas::add_tab<regular_submenu>("Stats", SubmenuStats, [](regular_submenu* sub)
         {
             if (auto character = unreal_engine::get_character_base())
             {
